@@ -92,5 +92,6 @@ public class ContohORM2 {
 //        }
         MainFrame mainFrame = new MainFrame();
         mainFrame.setVisible(true);
+       }
     }
 }
