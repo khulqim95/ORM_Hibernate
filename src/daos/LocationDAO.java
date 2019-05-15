@@ -3,6 +3,7 @@ package daos;
 import entities.Location;
 import entities.Region;
 import idaos.ILocationDAO;
+import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,35 +18,27 @@ import tools.HibernateUtil;
  * @author RR17
  */
 public class LocationDAO implements ILocationDAO {
-    private SessionFactory sessionFactory = null; //masuk koneksi pintu utama (masuk ke table HR)
-    private Session session = null; //masuk ke koneksi dalam yg sudah ada tujuan(hanya beberapa sesi2)
+    private SessionFactory sessionFactory = null;
+    private Session session = null;
     private Transaction transaction = null;
-    
-    public LocationDAO() {
-        this.sessionFactory = HibernateUtil.getSessionFactory();
-    }
 
     public LocationDAO(SessionFactory factory) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this.sessionFactory = factory;
     }
 
     @Override
     public List<Location> getAll() {
-//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-          List<Location> locations = new ArrayList<>();
+        List<Location> locations = new ArrayList<>();
         try {
-            session = sessionFactory.openSession(); //pembukaan sesinya
-            transaction = session.beginTransaction(); //kemudian pembukaan session untuk transaksi
-//            transaction.begin(); //mulai transaksi
-            locations = session.createQuery("FROM Location").list(); //regions kita isikan dengan mengambil data dari object Region
+            session = sessionFactory.openSession();
+            transaction = session.beginTransaction();
+            locations = session.createQuery("FROM Location").list();
             transaction.commit();
-        } catch (Exception e) {
+        } catch (Exception ex) {
             if (transaction != null) {
                 transaction.rollback();
             }
-            
-            System.out.println(e.getMessage());
-            e.printStackTrace();
+            ex.printStackTrace();
         } finally {
             session.close();
         }
@@ -53,47 +46,66 @@ public class LocationDAO implements ILocationDAO {
     }
 
     @Override
-    public Location getById(BigDecimal locationId) {
-//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        Location location = null;
-        session = this.sessionFactory.openSession();
-        transaction = session.beginTransaction();
+    public Location getById(int id) {
+        Location location = new Location();
         try {
-            String hql = "FROM Location WHERE locationId = :locationId";
-            Query query = session.createQuery(hql);
-            query.setParameter("locationId", locationId);
+            session = sessionFactory.openSession();
+            transaction = session.beginTransaction();
+            Query query = session.createQuery("FROM Location WHERE locationId=:1 ORDER BY 1");
+            query.setParameter(1, id);
             location = (Location) query.uniqueResult();
-        } catch (Exception e) {
-            e.printStackTrace();
-            if (transaction != null){
+            transaction.commit();
+        } catch (Exception ex) {
+            if (transaction != null) {
                 transaction.rollback();
             }
+            ex.printStackTrace();
+        } finally {
+            session.close();
         }
         return location;
     }
 
     @Override
-    public Location search(String keyword) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public boolean insert(Location location) {
-//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        boolean result = false;
-        session = sessionFactory.openSession();
-        transaction = session.beginTransaction();
+    public List<Location> search(Object keyword) {
+        List<Location> locations = new ArrayList<>();
         try {
-            session.save(location);
+            session = sessionFactory.openSession();
+            transaction = session.beginTransaction();
+            String hql = "FROM " + Location.class.getSimpleName() + " WHERE ";
+            for (Field field : Location.class.getDeclaredFields()) {
+                hql += field.getName() + " LIKE '%" + keyword + "%' OR ";
+            }
+            hql = hql.substring(0, hql.lastIndexOf(" OR "));
+            hql += " ORDER BY 1";
+            locations = session.createQuery(hql).list();
             transaction.commit();
-            result = true;
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ex) {
             if (transaction != null) {
                 transaction.rollback();
             }
-            System.out.println(e.getMessage());
+            ex.printStackTrace();
+        } finally {
+            session.close();
+        }
+        return locations;
+    }
 
+    @Override
+    public boolean insert(Location l) {
+        boolean result = false;
+        try {
+            session = sessionFactory.openSession();
+            transaction = session.beginTransaction();
+
+            session.save(l);
+            transaction.commit();
+            result = true;
+        } catch (Exception ex) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            ex.printStackTrace();
         } finally {
             session.close();
         }
@@ -101,22 +113,20 @@ public class LocationDAO implements ILocationDAO {
     }
 
     @Override
-    public boolean update(Location location) {
-//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public boolean update(Location l) {
         boolean result = false;
-        session = sessionFactory.openSession();
-        transaction = session.beginTransaction();
         try {
-            session.update(location);
+            session = sessionFactory.openSession();
+            transaction = session.beginTransaction();
+
+            session.update(l);
             transaction.commit();
             result = true;
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ex) {
             if (transaction != null) {
                 transaction.rollback();
             }
-            System.out.println(e.getMessage());
-
+            ex.printStackTrace();
         } finally {
             session.close();
         }
@@ -124,27 +134,23 @@ public class LocationDAO implements ILocationDAO {
     }
 
     @Override
-    public boolean delete(Location location) {
-//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public boolean delete(int id) {
         boolean result = false;
-        session = sessionFactory.openSession();
-        transaction = session.beginTransaction();
         try {
-            session.delete(location);
+            session = sessionFactory.openSession();
+            transaction = session.beginTransaction();
+
+            session.delete(new Location((short)id, ""));
             transaction.commit();
             result = true;
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ex) {
             if (transaction != null) {
                 transaction.rollback();
             }
-            System.out.println(e.getMessage());
-
+            ex.printStackTrace();
         } finally {
             session.close();
         }
         return result;
     }
-    
-    
 }
