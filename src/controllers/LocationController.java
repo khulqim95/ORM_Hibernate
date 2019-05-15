@@ -11,45 +11,65 @@ import org.hibernate.SessionFactory;
 /**
  *
  * @author RR17
+* @author Okala
  */
 public class LocationController implements ILocationController {
-    
+
     private ILocationDAO ildao;
-    
+
     public LocationController(SessionFactory factory) {
         ildao = new LocationDAO(factory);
     }
-    
+
     @Override
     public List<Location> getAll() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return ildao.getAll();
     }
 
     @Override
-    public Location getById(String locationId) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Location getById(String id) {
+        return ildao.getById(Integer.parseInt(id));
     }
 
     @Override
-    public List<Location> search(Object keyword) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public List<Location> search(String keyword) {
+        return ildao.search(keyword);
     }
 
     @Override
-    public String insert(String locationId, String city, String streetAddress, String postalCode, String stateProvince, String countryId) {
-//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        Location location = new Location(Short.MIN_VALUE, city, streetAddress, postalCode, stateProvince, countryId);
-        return null;
+    public String insert(String locationId, String streetAddress, String postalCode, String city, String stateProvince, String countryId) {
+        String result = "Data tidak berhasil disimpan";
+        Location location = new Location(Short.valueOf(locationId), streetAddress, postalCode, city, stateProvince, new Country(countryId));
+        if (locationId.isEmpty() || city.isEmpty()) {
+            result = "Data locationId atau city wajib diisi";
+        } else {
+            if (ildao.insert(location)) {
+                result = "true";
+            }
+        }
+        return result;
     }
 
     @Override
-    public String update(String locationId, String city, String streetAddress, String postalCode, String stateProvince, String countryId) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public String update(String locationId, String streetAddress, String postalCode, String city, String stateProvince, String countryId) {
+        String result = "Data tidak berhasil diupdate ";
+        Location location = new Location(Short.valueOf(locationId), streetAddress, postalCode, city, stateProvince, new Country(countryId));
+        if (locationId.isEmpty() || city.isEmpty()) {
+            result = "Data locationId atau city tidak boleh kosong";
+        } else {
+            if (ildao.update(location)) {
+                result = "true";
+            }
+        }
+        return result;
     }
 
     @Override
     public String delete(String locationId) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        String result = "Data tidak berhasil dihapus";
+        if (ildao.delete(Integer.parseInt(locationId))) {
+            result = "true";
+        }
+        return result;
     }
-    
 }
