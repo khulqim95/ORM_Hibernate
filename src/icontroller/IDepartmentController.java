@@ -3,17 +3,17 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package icontroller;
+package Icontroller;
 
+import Models.Employee;
 import java.util.List;
-import models.Department;
 
 /**
  *
- * @author sofia
+ * @author WIN7
  */
 public interface IDepartmentController {
-    public List<Department> getAll();
-    public List<Department> search(String keyword);
-    public String delete(Department department);
+    
+  public String update(String id, String name,String Manager_id, String Location_id);
+    
 }

@@ -3,50 +3,43 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package controller;
+package Controller;
 
-import daos.CountryDAO;
-import daos.DepartmentDAO;
-import icontroller.IDepartmentController;
+import Daos.DepartmentDAO;
+import Icontroller.IDepartmentController;
+import Idaos.IDepartmentDAO;
+import Models.Country;
+import Models.Department;
+import Models.Employee;
+import Models.Location;
+import Models.Region;
+import java.math.BigDecimal;
 import java.util.List;
-import models.Department;
 import org.hibernate.SessionFactory;
 
 /**
  *
- * @author sofia
+ * @author WIN7
  */
 public class DepartmentController implements IDepartmentController{
     
-    private DepartmentDAO ddao;
-
+    private IDepartmentDAO idc;
     
-    public DepartmentController(SessionFactory factory) {
-        ddao = new DepartmentDAO(factory);
-    }
-    
-    @Override
-    public List<Department> getAll() {
-        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        return ddao.getAll();
+    public DepartmentController(SessionFactory factory){
+        idc = new DepartmentDAO();
     }
 
     @Override
-    public String delete(Department department) {
-        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        String result = "";
-        if (ddao.delete(department)) {
-            result = "delete success";
-        }else {
-            result =  "delete failed";
+    public String update(String id, String name, String Manager_id, String Location_id) {
+        Department d = new Department(new Short(id), name, new Employee(new Integer(Manager_id)), new Location(new Short(Location_id)));
+        d.setDepartmentId(new Short(id));
+        if (idc.update(d)) {
+            return "update succes";
+        }else{
+            return "update failed";
         }
-        return result;
     }
 
-    @Override
-    public List<Department> search(String keyword) {
-        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        return ddao.search(keyword);
-    }
+
     
 }

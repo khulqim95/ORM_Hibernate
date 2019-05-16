@@ -3,185 +3,159 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package daos;
+package Daos;
 
-import java.util.List;
-import models.Region;
-import idaos.IRegionDAO;
+import Idaos.IRegionDAO;
+import Models.Region;
+import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.List;
+import org.hibernate.Hibernate;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import tools.HibernateUtil;
+
 /**
  *
- * @author sofia
+ * @author WIN7
  */
-public class RegionDAO implements idaos.IRegionDAO{
-
-    private SessionFactory factory = null;
-    private Session session = null;
-    private Transaction transaction = null;
-
-    public RegionDAO() {
-        this.factory = HibernateUtil.getSessionFactory();
-    }
-       
-    public  RegionDAO(SessionFactory factory){
-        this.factory = factory;
-    }
+public class RegionDAO implements IRegionDAO{
     
-    @Override
+    private SessionFactory sessionFactory =null; // KONEKSI DATABSAE SESION FACTORY 
+    private Session session = null; 
+    private Transaction transaction = null; 
+
+    
+    public RegionDAO(){
+        this.sessionFactory= HibernateUtil.getSessionFactory();// CONSTRUCTUR LANGSUNG BIKIN KONEKSI NYA INSTANSIASI
+    }
+
+    @Override // satu fungsi nama nya get ALL
     public List<Region> getAll() {
-        List<Region> regions = new ArrayList<Region>();
+        List<Region> regions = new ArrayList<>(); // diamond operator <>
         try {
-            session = factory.openSession();
-            transaction = session.beginTransaction();
-//            transaction.begin();
-            regions = session.createQuery("FROM Region").list();
-            transaction.commit();
+            session = sessionFactory.openSession(); // membuka sesi 
+            transaction = session.beginTransaction(); // sesi dimulai
+            //transaction.begin();// transaksi di mulai
+            regions =session.createQuery("FROM Region").list(); // from region itu nama class nya 
+            transaction.commit();// sesi di kommit 
+            
         } catch (Exception e) {
-            if (transaction != null) transaction.rollback();
-            e.printStackTrace();
+            if (transaction!=null) transaction.rollback();
             System.out.println(e.getMessage());
-        } finally {
+            e.printStackTrace();
+        }finally{
             session.close();
         }
         return regions;
-    }           
-    
-     @Override
-    public boolean insertRegion(Region region) {
-        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        boolean result = false;   
-        try {
-            session = factory.openSession();
-            transaction = session.beginTransaction();
-            session.save(region);
-            transaction.commit();
-            result = true;
-        } catch (Exception e) {
-            if (transaction != null) transaction.rollback();
-            e.printStackTrace();
-            System.out.println(e.getMessage());            
-        } finally {
-            session.close();
-        }
-        return result;
-    }
-    
-    @Override
-    public boolean update(Region region ) {
-        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        boolean result = false;   
-        try {
-            session = factory.openSession();
-            transaction = session.beginTransaction();
-            session.update(region);
-            transaction.commit();
-            result = true;
-        } catch (Exception e) {
-            if (transaction != null) transaction.rollback();
-            e.printStackTrace();
-            System.out.println(e.getMessage());            
-        } finally {
-            session.close();
-        }
-        return result;
     }
 
     @Override
-    public boolean delete(Region region) {
-        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        boolean result = false;   
+    public boolean insert(Region r) {
+        boolean result = false;
+        
         try {
-            session = factory.openSession();
+            session = sessionFactory.openSession();
             transaction = session.beginTransaction();
-            session.delete(region);
-            transaction.commit();
+            session.save(r);
+             transaction.commit();
+           // session.update(r);
             result = true;
+             
         } catch (Exception e) {
-            if (transaction != null) transaction.rollback();
-            e.printStackTrace();
-            System.out.println(e.getMessage());            
-        } finally {
-            session.close();
-        }
-        return result;
-    }
-
-    @Override
-    public Region getById(String regionId) {
-        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        Region region = null;
-        session = this.factory.openSession();
-        transaction = session.beginTransaction();
-        try {
-            String hql = "FROM Region WHERE regionId = :regionId";
-            Query query = session.createQuery(hql);
-            query.setParameter("regionId", new BigDecimal(regionId));
-            region = (Region) query.uniqueResult();            
-        } catch (Exception e) {
-            e.printStackTrace();
-            if (transaction != null) {
-                transaction.rollback();
-            }
+            if (transaction!=null) transaction.rollback();
             System.out.println(e.getMessage());
-        }
-        return region;         
-    }   
-
-    @Override
-    public Region search(String key) {
-        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.        
-//        List<Region> region = new ArrayList<>();
-//        session = this.sessionFactory.openSession();
-//        transaction = session.beginTransaction();
-//        try {
-//            String hql = "FROM Region WHERE regionId LIKE :id OR regionName LIKE :name";
-//            Query query = session.createQuery(hql);
-//            query.setParameter("id", new BigDecimal(key));
-//            query.setParameter("name",key);
-//            region = query.list();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            if (transaction != null) {
-//                transaction.rollback();
-//            }
-//        }
-//        return region;
-          Region region = null;
-        session = this.factory.openSession();
-        transaction = session.beginTransaction();
-        try {
-            String hql = "FROM Region WHERE regionId LIKE :regionId OR regionName LIKE :regionName";
-            Query query = session.createQuery(hql);
-            query.setParameter("regionId", new BigDecimal(key));
-            query.setParameter("regionName", key);
-            region = (Region) query.uniqueResult();            
-        } catch (Exception e) {
             e.printStackTrace();
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            System.out.println(e.getMessage());
+        }finally{
+            session.close();
         }
-        return region;      
+        return result;
     }
 
     @Override
-    public List<Region> getId(String id) {
-        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.         
-       List<Region> region = new ArrayList<>();
-       session = this.factory.openSession();
+    public boolean update(Region r) {
+        boolean result = false;
+        
+        try {
+            session = sessionFactory.openSession();
+            transaction = session.beginTransaction();
+            session.update(r);
+             transaction.commit();
+           // session.update(r);
+            result = true;
+             
+        } catch (Exception e) {
+            if (transaction!=null) transaction.rollback();
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+        }finally{
+            session.close();
+        }
+        return result;
+        
+        
+    }
+
+    @Override
+    public boolean delete(Region r) {
+            boolean result = false;
+        
+        try {
+            session = sessionFactory.openSession();
+            transaction = session.beginTransaction();
+            session.delete(r);
+             transaction.commit();
+           // session.update(r);
+            result = true;
+             
+        } catch (Exception e) {
+            if (transaction!=null) transaction.rollback();
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+        }finally{
+            session.close();
+        }
+        return result;
+        
+    }
+
+    @Override
+    public List<Region> getById(String id) {
+        List<Region> region = new ArrayList<>();
+      
+        session = sessionFactory.openSession();
         transaction = session.beginTransaction();
+        try {
+            String hql =" FROM Region WHERE regionId = :a";
+            Query query = session.createQuery(hql);
+            query.setParameter("a", new BigDecimal(id));
+            
+            region = query.list();
+        } catch (Exception e) {
+            e.printStackTrace();
+            if(transaction != null){
+                transaction.rollback();
+                
+            }
+        }
+        return  region;
+    
+        
+    }
+
+    @Override
+    public Region getId(String id) {
+       Region region = null;
+       session = this.sessionFactory.openSession();
+       transaction = session.beginTransaction();
         try {
             String hql = "FROM Region WHERE regionId = :a";
             Query query = session.createQuery(hql);
             query.setParameter("a",new BigDecimal(id));
-            region = query.list();
+            region = (Region) query.uniqueResult();
         } catch (Exception e) {
             e.printStackTrace();
             if (transaction != null) {
@@ -190,4 +164,37 @@ public class RegionDAO implements idaos.IRegionDAO{
         }
         return region;
     }
-}
+
+    @Override
+    public List<Region> search(Object key) {
+        
+        List<Region> search = new ArrayList<>();
+        try {
+            session = sessionFactory.openSession();
+            transaction = session.beginTransaction();
+            String hql = "FROM " + Region.class.getSimpleName() + " WHERE ";
+            for (Field field : Region.class.getDeclaredFields()) {
+                if (!field.getName().contains("UID")&& !field.getName().contains("List")) {
+                hql += field.getName() + " LIKE '%" + key + "%' OR ";
+                }
+            }
+            hql = hql.substring(0, hql.lastIndexOf(" OR "));
+            hql += " ORDER BY 1";
+            search = session.createQuery(hql).list();
+            transaction.commit();
+            System.out.println(hql);
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+        return search;
+    
+    }
+    
+        }
+

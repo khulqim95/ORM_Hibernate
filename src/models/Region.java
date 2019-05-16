@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package models;
+package Models;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -22,13 +22,13 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author sofia
+ * @author WIN7
  */
 @Entity
-@Table(name = "REGIONS")
+@Table(name = "REGIONS") //merefrensikan ke tabel yg nama nya region di dalam database
 @XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "Region.findAll", query = "SELECT r FROM Region r")
+@NamedQueries({ //ada query yg sudah di sediakan 
+    @NamedQuery(name = "Region.findAll", query = "SELECT r FROM Region r") // region nama objek bukan nama database 
     , @NamedQuery(name = "Region.findByRegionId", query = "SELECT r FROM Region r WHERE r.regionId = :regionId")
     , @NamedQuery(name = "Region.findByRegionName", query = "SELECT r FROM Region r WHERE r.regionName = :regionName")})
 public class Region implements Serializable {
@@ -36,20 +36,15 @@ public class Region implements Serializable {
     private static final long serialVersionUID = 1L;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Id
-    @Basic(optional = false)
-    @Column(name = "REGION_ID")
-    private BigDecimal regionId;
+    @Basic(optional = false)// optional data nya harus di isi
+    @Column(name = "REGION_ID")// region_id yg ada di databse
+    private BigDecimal regionId;// ini yg akan kita buat
     @Column(name = "REGION_NAME")
     private String regionName;
     @OneToMany(mappedBy = "regionId", fetch = FetchType.LAZY)
-    private List<Country> countryList;
+    private List<Country> countryList; // relasi. list itu digunakan untuk relasi 
 
     public Region() {
-    }
-
-    public Region(BigDecimal regionId, String regionName) {
-        this.regionId = regionId;
-        this.regionName = regionName;
     }
 
     public Region(BigDecimal regionId) {
@@ -58,6 +53,11 @@ public class Region implements Serializable {
 
     public BigDecimal getRegionId() {
         return regionId;
+    }
+
+    public Region(BigDecimal regionId, String regionName) {
+        this.regionId = regionId;
+        this.regionName = regionName;
     }
 
     public void setRegionId(BigDecimal regionId) {
@@ -103,7 +103,7 @@ public class Region implements Serializable {
 
     @Override
     public String toString() {
-        return "models.Region[ regionId=" + regionId + " ]";
+        return "Models.Region[ regionId=" + regionId + " ]";
     }
     
 }

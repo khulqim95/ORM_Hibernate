@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package models;
+package Models;
 
 import java.io.Serializable;
 import java.util.List;
@@ -22,7 +22,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author sofia
+ * @author WIN7
  */
 @Entity
 @Table(name = "JOBS")
@@ -60,13 +60,6 @@ public class Job implements Serializable {
     public Job(String jobId, String jobTitle) {
         this.jobId = jobId;
         this.jobTitle = jobTitle;
-    }
-
-    public Job(String jobId, String jobTitle, Integer minSalary, Integer maxSalary) {
-        this.jobId = jobId;
-        this.jobTitle = jobTitle;
-        this.minSalary = minSalary;
-        this.maxSalary = maxSalary;
     }
 
     public String getJobId() {
@@ -132,7 +125,7 @@ public class Job implements Serializable {
 
     @Override
     public String toString() {
-        return "models.Job[ jobId=" + jobId + " ]";
+        return "Models.Job[ jobId=" + jobId + " ]";
     }
     
 }

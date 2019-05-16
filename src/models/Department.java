@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package models;
+package Models;
 
 import java.io.Serializable;
 import java.util.List;
@@ -23,7 +23,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author sofia
+ * @author WIN7
  */
 @Entity
 @Table(name = "DEPARTMENTS")
@@ -62,6 +62,23 @@ public class Department implements Serializable {
         this.departmentId = departmentId;
         this.departmentName = departmentName;
     }
+
+    public Department(Short departmentId, String departmentName, List<Employee> employeeList, Employee managerId, Location locationId) {
+        this.departmentId = departmentId;
+        this.departmentName = departmentName;
+        this.employeeList = employeeList;
+        this.managerId = managerId;
+        this.locationId = locationId;
+    }
+
+    public Department(Short departmentId, String departmentName, Employee managerId, Location locationId) {
+        this.departmentId = departmentId;
+        this.departmentName = departmentName;
+        this.managerId = managerId;
+        this.locationId = locationId;
+    }
+    
+    
 
     public Short getDepartmentId() {
         return departmentId;
@@ -126,7 +143,7 @@ public class Department implements Serializable {
 
     @Override
     public String toString() {
-        return "models.Department[ departmentId=" + departmentId + " ]";
+        return "Models.Department[ departmentId=" + departmentId + " ]";
     }
     
 }

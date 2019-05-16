@@ -3,14 +3,29 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package idaos;
+package Idaos;
 
-import models.Location;
+import Models.Location;
+import java.util.List;
 
 /**
  *
- * @author sofia
+ * @author WIN7
  */
 public interface ILocationDAO {
-    public Location getById(String locationId);
+    public List<Location> getAll();
+    
+    public boolean insert(Location l);
+    
+    public boolean Update(Location l);
+    
+    public boolean delete (Location l);
+    
+//    public Location getId(String id);
+//    
+//    public List<Location> getById(String id);
+
+    public List<Location> search (Object keyword);
+    
+
 }

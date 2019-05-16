@@ -3,25 +3,29 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package idaos;
+package Idaos;
 
-import java.math.BigDecimal;
+import Models.Region;
 import java.util.List;
-import models.Region;
 
 /**
  *
- * @author sofia
+ * @author WIN7
  */
-public interface IRegionDAO {
-    public List<Region> getAll();
-    public Region getById(String regionId);
-    public List<Region> getId(String id);
-    public boolean insertRegion(Region region);
-    public boolean update(Region region);
-    public boolean delete(Region region);
-//    public List<Region> search (Object key);
-    public Region search (String key);
+public interface IRegionDAO  {
     
+    public List<Region> getAll();
+    
+    public boolean insert(Region r);
+    
+    public boolean update(Region r);
+    
+    public boolean delete(Region r);
+
+    public Region getId(String id);
+    
+    public List<Region> getById(String id);
+    
+    public List<Region> search (Object key);
     
 }
