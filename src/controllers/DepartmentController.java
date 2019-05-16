@@ -8,11 +8,11 @@ package Controller;
 import Daos.DepartmentDAO;
 import Icontroller.IDepartmentController;
 import Idaos.IDepartmentDAO;
-import Models.Country;
-import Models.Department;
-import Models.Employee;
-import Models.Location;
-import Models.Region;
+import models.Country;
+import models.Department;
+import models.Employee;
+import models.Location;
+import models.Region;
 import java.math.BigDecimal;
 import java.util.List;
 import org.hibernate.SessionFactory;
@@ -38,6 +38,16 @@ public class DepartmentController implements IDepartmentController{
         }else{
             return "update failed";
         }
+    }
+
+    @Override
+    public List<Department> getAll() {
+            return idc.getAll();
+    }
+
+    @Override
+    public List<Department> search(String key) {
+         return idc.search(key);
     }
 
 

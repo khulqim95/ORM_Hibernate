@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Models;
+package models;
 
 import java.io.Serializable;
 import java.util.List;
@@ -23,7 +23,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author WIN7
+ * @author yosef
  */
 @Entity
 @Table(name = "LOCATIONS")
@@ -63,22 +63,13 @@ public class Location implements Serializable {
     public Location(Short locationId) {
         this.locationId = locationId;
     }
+    
+    
 
     public Location(Short locationId, String city) {
         this.locationId = locationId;
         this.city = city;
     }
-
-    public Location(Short locationId, String streetAddress, String postalCode, String city, String stateProvince, Country countryId, List<Department> departmentList) {
-        this.locationId = locationId;
-        this.streetAddress = streetAddress;
-        this.postalCode = postalCode;
-        this.city = city;
-        this.stateProvince = stateProvince;
-        this.countryId = countryId;
-        this.departmentList = departmentList;
-    }
-    
 
     public Short getLocationId() {
         return locationId;
@@ -94,6 +85,15 @@ public class Location implements Serializable {
 
     public void setStreetAddress(String streetAddress) {
         this.streetAddress = streetAddress;
+    }
+
+    public Location(Short locationId, String streetAddress, String postalCode, String city, String stateProvince, Country countryId) {
+        this.locationId = locationId;
+        this.streetAddress = streetAddress;
+        this.postalCode = postalCode;
+        this.city = city;
+        this.stateProvince = stateProvince;
+        this.countryId = countryId;
     }
 
     public String getPostalCode() {
@@ -159,7 +159,7 @@ public class Location implements Serializable {
 
     @Override
     public String toString() {
-        return "Models.Location[ locationId=" + locationId + " ]";
+        return "models.Location[ locationId=" + locationId + " ]";
     }
     
 }

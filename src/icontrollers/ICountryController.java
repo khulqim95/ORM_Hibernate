@@ -5,27 +5,27 @@
  */
 package Icontroller;
 
-import Models.Region;
+import models.Country;
 import java.util.List;
 
 /**
  *
  * @author WIN7
  */
-public interface IRegionController {
+public interface ICountryController {
     
-    public List<Region> getAll();
+    public List<Country> getAll();
 
-    public List<Region> getById(String id);
+    public List<Country> getById(String id);
 
-    public List<Region> search(String key);
+    public List<Country> search(String key);
 
-    public String insert(String id, String name);
+    public String insert(String id, String name, String region);
 
-    public String update(String id, String name);
+    public String update(String id, String name, String region);
 
     public String delete(String id);
     
-    
+
     
 }

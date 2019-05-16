@@ -3,29 +3,29 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Idaos;
+package idaos;
 
-import Models.Region;
 import java.util.List;
+import models.Region;
 
 /**
  *
- * @author WIN7
+ * @author yosef
  */
-public interface IRegionDAO  {
+public interface IRegionDAO {
     
     public List<Region> getAll();
-    
-    public boolean insert(Region r);
-    
-    public boolean update(Region r);
-    
-    public boolean delete(Region r);
-
+//    
     public Region getId(String id);
     
     public List<Region> getById(String id);
     
-    public List<Region> search (Object key);
+//    public boolean insert(Region r);
+//    
+//    public boolean update(Region r);
     
+    public boolean delete (Region r);
+    
+    public List<Region> search(Object key); 
+       
 }

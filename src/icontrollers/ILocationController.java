@@ -3,28 +3,20 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Icontroller;
+package icontrollers;
 
-//import Models.Region;
-import Models.Location;
 import java.util.List;
+import models.Location;
 
 /**
  *
- * @author WIN7
+ * @author yosef
  */
 public interface ILocationController {
-    
-    public List<Location> getAll();
-
-//    public List<Location> getById(String id);
 
     public List<Location> search(String key);
 
-    public String insert(String id, String name);
-
-    public String update(String id, String name);
-
-    public String delete(String id);
+    public List<Location> getAll();
     
+    public String Update (String id, String street, String postal, String city, String state, String countryId);
 }

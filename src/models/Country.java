@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Models;
+package models;
 
 import java.io.Serializable;
 import java.util.List;
@@ -23,7 +23,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author WIN7
+ * @author yosef
  */
 @Entity
 @Table(name = "COUNTRIES")
@@ -50,10 +50,8 @@ public class Country implements Serializable {
     public Country() {
     }
 
-    public Country(String countryId, String countryName) {
+    public Country(String countryId) {
         this.countryId = countryId;
-        this.countryName = countryName;
-       
     }
 
     public Country(String countryId, String countryName, Region regionId) {
@@ -63,12 +61,6 @@ public class Country implements Serializable {
     }
     
     
-    
-
-    public Country(String countryId) {
-        this.countryId = countryId;
-    }
-
     public String getCountryId() {
         return countryId;
     }
@@ -124,7 +116,7 @@ public class Country implements Serializable {
 
     @Override
     public String toString() {
-        return "Models.Country[ countryId=" + countryId + " ]";
+        return "models.Country[ countryId=" + countryId + " ]";
     }
     
 }

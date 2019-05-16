@@ -5,16 +5,13 @@
  */
 package views;
 
-import Controller.LocationController;
-import Controller.RegionController;
-import Daos.LocationDAO;
-import Icontroller.ILocationController;
-import Icontroller.IRegionController;
-import Models.Location;
+import controllers.LocationController;
+import icontrollers.ILocationController;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import org.hibernate.SessionFactory;
+import models.Location;
 import tools.HibernateUtil;
 
 /**
@@ -23,16 +20,15 @@ import tools.HibernateUtil;
  */
 public class JILocationView extends javax.swing.JInternalFrame {
 
-    LocationDAO ldao = new LocationDAO();
-    LocationController ilc = new LocationController(HibernateUtil.getSessionFactory());
-   
-    
+    /**
+     * Creates new form JILocationView
+     */
     public JILocationView() {
         initComponents();
         showTableLocation("");
     }
-    
-    public void resetTextLocation(){
+
+    public void resetTextLocation() {
         txtLocationID.setText("");
         txtStreetAddress.setText("");
         txtPostalCode.setText("");
@@ -42,45 +38,69 @@ public class JILocationView extends javax.swing.JInternalFrame {
         txtLocationID.setEditable(true);
         btnInsertLocation.setEnabled(true);
     }
-    
 
-    public void showTableLocation(String key){
+    ILocationController ilc = new LocationController(HibernateUtil.getSessionFactory());
+
+    public void showTableLocation(String key) {
         DefaultTableModel model = (DefaultTableModel) tableLocation.getModel();
         Object[] row = new Object[7];
-        List<Location> locations = ilc.search(key);
-        if (key.isEmpty()) {
-            locations = ilc.getAll();
-        }
+        List<Location> locations = new ArrayList<>();
+        locations = ilc.search(key);
         for (int i = 0; i < locations.size(); i++) {
             row[0] = i + 1;
             row[1] = locations.get(i).getLocationId();
             row[2] = locations.get(i).getStreetAddress();
             row[3] = locations.get(i).getPostalCode();
             row[4] = locations.get(i).getCity();
-            row[5] = locations.get(i).getStateProvince();
-            if (locations.get(i).getCountryId()==null) {
-                row[6] = ("");
+            if (locations.get(i).getStateProvince() == null) {
+                row[5] = "";
             } else {
-                row[6] = locations.get(i).getCountryId().getCountryName();
+                row[5] = locations.get(i).getStateProvince();
             }
+            row[6] = locations.get(i).getCountryId().getCountryId();
             model.addRow(row);
         }
-        
     }
-    
-    public void updateTableLocation(){
-        DefaultTableModel model = (DefaultTableModel)tableLocation.getModel();
-        model.setRowCount(0);
-        showTableLocation("");
-    }
-    
-    public void updateTableLocation(String s){
-        
-        DefaultTableModel model = (DefaultTableModel)tableLocation.getModel();
-        model.setRowCount(0);
-        if(s == null){
-            showTableLocation("");
+
+    public void showTableLocation() {
+        DefaultTableModel model = (DefaultTableModel) tableLocation.getModel();
+        Object[] row = new Object[6];
+        List<Location> locations = new ArrayList<>();
+        locations = ilc.getAll();
+        for (int i = 0; i < ilc.getAll().size(); i++) {
+            row[0] = i + 1;
+            row[1] = locations.get(i).getLocationId();
+            row[2] = locations.get(i).getStreetAddress();
+            row[3] = locations.get(i).getPostalCode();
+            row[4] = locations.get(i).getCity();
+            if (locations.get(i).getStateProvince() == null) {
+                row[5] = "";
+            } else {
+                row[5] = locations.get(i).getStateProvince();
+            }
+            row[6] = locations.get(i).getCountryId().getCountryId();
+
+            model.addRow(row);
         }
+    }
+//    public void updateTableLocation(){
+//        DefaultTableModel model = (DefaultTableModel)tableLocation.getModel();
+//        model.setRowCount(0);
+//        showTableLocation();
+//    }
+//    
+//    public void updateTableLocation(String s){
+//        DefaultTableModel model = (DefaultTableModel)tableLocation.getModel();
+//        model.setRowCount(0);
+//        if(s == null){
+//            showTableLocation();
+//        }
+//        showTableLocation(s);
+//    }
+
+    public void updateTableLocation(String s) {
+        DefaultTableModel model = (DefaultTableModel) tableLocation.getModel();
+        model.setRowCount(0);
         showTableLocation(s);
     }
 
@@ -271,11 +291,11 @@ public class JILocationView extends javax.swing.JInternalFrame {
 
             },
             new String [] {
-                "LocationID", "StreetAddress", "PostalCode", "City", "StateProvince", "CountryID"
+                "No", "LocationID", "StreetAddress", "PostalCode", "City", "StateProvince", "CountryID"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false
+                true, true, false, false, false, false, true
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -289,12 +309,12 @@ public class JILocationView extends javax.swing.JInternalFrame {
         });
         jScrollPane2.setViewportView(tableLocation);
         if (tableLocation.getColumnModel().getColumnCount() > 0) {
-            tableLocation.getColumnModel().getColumn(0).setResizable(false);
             tableLocation.getColumnModel().getColumn(1).setResizable(false);
             tableLocation.getColumnModel().getColumn(2).setResizable(false);
             tableLocation.getColumnModel().getColumn(3).setResizable(false);
             tableLocation.getColumnModel().getColumn(4).setResizable(false);
             tableLocation.getColumnModel().getColumn(5).setResizable(false);
+            tableLocation.getColumnModel().getColumn(6).setResizable(false);
         }
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -312,17 +332,13 @@ public class JILocationView extends javax.swing.JInternalFrame {
                             .addComponent(jLabel10)
                             .addComponent(jLabel11))
                         .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(btnInsertLocation)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(btnUpdateLocation)
-                                .addGap(37, 37, 37)
-                                .addComponent(btnDeleteLocation)
-                                .addGap(30, 30, 30)
-                                .addComponent(btnResetLocation))
-                            .addComponent(txtCountryID)
-                            .addComponent(txtStateProvince))
+                        .addComponent(btnInsertLocation)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnUpdateLocation)
+                        .addGap(37, 37, 37)
+                        .addComponent(btnDeleteLocation)
+                        .addGap(30, 30, 30)
+                        .addComponent(btnResetLocation)
                         .addGap(45, 45, 45))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -345,11 +361,13 @@ public class JILocationView extends javax.swing.JInternalFrame {
                                             .addComponent(txtPostalCode, javax.swing.GroupLayout.DEFAULT_SIZE, 358, Short.MAX_VALUE)
                                             .addComponent(txtStreetAddress)
                                             .addComponent(txtLocationID)
-                                            .addComponent(txtCity)))
+                                            .addComponent(txtCity)
+                                            .addComponent(txtStateProvince)
+                                            .addComponent(txtCountryID)))
                                     .addGroup(layout.createSequentialGroup()
                                         .addGap(195, 195, 195)
                                         .addComponent(jLabel1)))
-                                .addGap(0, 0, Short.MAX_VALUE)))
+                                .addGap(0, 33, Short.MAX_VALUE)))
                         .addContainerGap())))
         );
         layout.setVerticalGroup(
@@ -393,7 +411,7 @@ public class JILocationView extends javax.swing.JInternalFrame {
                     .addComponent(txtSearchLocation, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel7))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 239, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 243, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -402,51 +420,52 @@ public class JILocationView extends javax.swing.JInternalFrame {
 
     private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
         // TODO add your handling code here:
-        
+
     }//GEN-LAST:event_btnClearActionPerformed
 
     private void btnInsertRegionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInsertRegionActionPerformed
         // TODO add your handling code here:
-        
+
     }//GEN-LAST:event_btnInsertRegionActionPerformed
 
     private void btnUpdateRegionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateRegionActionPerformed
         // TODO add your handling code here:
-        
+
     }//GEN-LAST:event_btnUpdateRegionActionPerformed
 
     private void btnDeleteRegionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteRegionActionPerformed
         // TODO add your handling code here:
-        
+
     }//GEN-LAST:event_btnDeleteRegionActionPerformed
 
     private void txtRegionSearchKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtRegionSearchKeyTyped
         // TODO add your handling code here:
-        
+
     }//GEN-LAST:event_txtRegionSearchKeyTyped
 
     private void tableRegionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableRegionMouseClicked
         // TODO add your handling code here:
-        
+
     }//GEN-LAST:event_tableRegionMouseClicked
 
     private void btnInsertLocationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInsertLocationActionPerformed
         // TODO add your handling code here:
-//     
-//            JOptionPane.showMessageDialog(null, ilc.(txtLocationID.getText(), txtStreetAddress.getText(), txtPostalCode.getText(), txtCity.getText(), txtStateProvince.getText(), txtCountryID.getText()));
-//            updateTableLocation();
-//            resetTextLocation();
-//        
-    }//GEN-LAST:event_btnInsertLocationActionPerformed
-
-    private void btnUpdateLocationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateLocationActionPerformed
-        // TODO add your handling code here:
-//        int confirm = JOptionPane.showConfirmDialog(this, "Apakah anda yakin untuk melakukan update?", "Confirm Update", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+//        int confirm = JOptionPane.showConfirmDialog(this, "Apakah anda yakin untuk melakukan insert?", "Confirm Insert", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 //        if(confirm==JOptionPane.YES_OPTION){
-//            JOptionPane.showMessageDialog(null, ilc.update(txtLocationID.getText(), txtStreetAddress.getText(), txtPostalCode.getText(), txtCity.getText(), txtStateProvince.getText(), txtCountryID.getText()));
+//            JOptionPane.showMessageDialog(null, ilc.insert(txtLocationID.getText(), txtStreetAddress.getText(), txtPostalCode.getText(), txtCity.getText(), txtStateProvince.getText(), txtCountryID.getText()));
 //            updateTableLocation();
 //            resetTextLocation();
 //        }
+    }//GEN-LAST:event_btnInsertLocationActionPerformed
+
+    private void btnUpdateLocationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateLocationActionPerformed
+//         TODO add your handling code here:
+        
+            JOptionPane.showMessageDialog(null, ilc.Update(txtLocationID.getText(),
+            txtStreetAddress.getText(), txtPostalCode.getText(), txtCity.getText(), txtStateProvince.getText(), txtCountryID.getText()));
+            updateTableLocation("");
+            resetTextLocation();
+        
     }//GEN-LAST:event_btnUpdateLocationActionPerformed
 
     private void btnDeleteLocationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteLocationActionPerformed
@@ -461,17 +480,17 @@ public class JILocationView extends javax.swing.JInternalFrame {
 
     private void tableLocationMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableLocationMouseClicked
         // TODO add your handling code here:
-        DefaultTableModel model = (DefaultTableModel)tableLocation.getModel();
+        DefaultTableModel model = (DefaultTableModel) tableLocation.getModel();
         int SelectedRowIndex = tableLocation.getSelectedRow();
-        
+
         txtLocationID.setEditable(false);
         btnInsertLocation.setEnabled(false);
-        txtLocationID.setText(model.getValueAt(SelectedRowIndex, 0).toString());
-        txtStreetAddress.setText(model.getValueAt(SelectedRowIndex, 1).toString());
-        txtPostalCode.setText(model.getValueAt(SelectedRowIndex, 2).toString());
-        txtCity.setText(model.getValueAt(SelectedRowIndex, 3).toString());
-        txtStateProvince.setText(model.getValueAt(SelectedRowIndex, 4).toString());
-        txtCountryID.setText(model.getValueAt(SelectedRowIndex, 5).toString());
+        txtLocationID.setText(model.getValueAt(SelectedRowIndex, 1).toString());
+        txtStreetAddress.setText(model.getValueAt(SelectedRowIndex, 2).toString());
+        txtPostalCode.setText(model.getValueAt(SelectedRowIndex, 3).toString());
+        txtCity.setText(model.getValueAt(SelectedRowIndex, 4).toString());
+        txtStateProvince.setText(model.getValueAt(SelectedRowIndex, 5).toString());
+        txtCountryID.setText(model.getValueAt(SelectedRowIndex, 6).toString());
     }//GEN-LAST:event_tableLocationMouseClicked
 
     private void btnResetLocationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetLocationActionPerformed
@@ -482,14 +501,10 @@ public class JILocationView extends javax.swing.JInternalFrame {
     private void txtSearchLocationKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSearchLocationKeyTyped
         // TODO add your handling code here:
         updateTableLocation(txtSearchLocation.getText());
-        
     }//GEN-LAST:event_txtSearchLocationKeyTyped
 
     private void txtSearchLocationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSearchLocationActionPerformed
-        JOptionPane.showMessageDialog(null, ldao.search(txtSearchLocation.getText()));
-         resetTextLocation();
-//       updateTableLocation("")     
-        
+        // TODO add your handling code here:
     }//GEN-LAST:event_txtSearchLocationActionPerformed
 
     private void cmbSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbSearchActionPerformed

@@ -8,6 +8,10 @@ package views;
 import Controller.CountryController;
 import Daos.CountryDAO;
 import Icontroller.ICountryController;
+import models.Country;
+import models.Department;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import org.hibernate.SessionFactory;
@@ -40,22 +44,40 @@ public final class JICountryView extends javax.swing.JInternalFrame {
 
     public void showTableCountry() {
         DefaultTableModel model = (DefaultTableModel) tableCountry.getModel();
-        Object[] row = new Object[3];
+        Object[] row = new Object[4];
+        List<Country> countrys = new ArrayList<>();
+        countrys = icc.getAll();
         for (int i = 0; i < icc.getAll().size(); i++) {
-            row[0] = icc.getAll().get(i).getCountryId();
-            row[1] = icc.getAll().get(i).getCountryName();
-            row[2] = icc.getAll().get(i).getRegionId();
+            row[0] = i + 1;
+            row[1] = icc.getAll().get(i).getCountryId();
+            row[2] = icc.getAll().get(i).getCountryName();
+            row[3] = icc.getAll().get(i).getRegionId();
+            if(countrys.get(i).getRegionId()== null){
+                row[3]="";
+            }else{
+                row[3]=countrys.get(i).getRegionId().getRegionId();
+            }
+            
             model.addRow(row);
         }
     }
 
     public void showTableCountry(String s) {
         DefaultTableModel model = (DefaultTableModel) tableCountry.getModel();
-        Object[] row = new Object[3];
+        Object[] row = new Object[4];
+        List<Country> countrys = new ArrayList<>();
+        countrys = icc.getAll();
         for (int i = 0; i < icc.search(s).size(); i++) {
-            row[0] = icc.search(s).get(i).getCountryId();
-            row[1] = icc.search(s).get(i).getCountryName();
-            row[2] = icc.search(s).get(i).getRegionId();
+            row[0] = i + 1;
+            row[1] = icc.search(s).get(i).getCountryId();
+            row[2] = icc.search(s).get(i).getCountryName();
+            row[3] = icc.search(s).get(i).getRegionId();
+            if(countrys.get(i).getRegionId()== null){
+                row[3]="";
+            }else{
+                row[3]=countrys.get(i).getRegionId().getRegionId();
+            }
+            
             model.addRow(row);
         }
     }
@@ -167,14 +189,14 @@ public final class JICountryView extends javax.swing.JInternalFrame {
 
             },
             new String [] {
-                "ID", "NAME", "REGION"
+                "NO", "ID", "NAME", "REGION"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.Integer.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false
+                false, false, false, true
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -348,9 +370,9 @@ public final class JICountryView extends javax.swing.JInternalFrame {
 
         txtCountryId.setEditable(false);
         btnInsertCountry.setEnabled(false);
-        txtCountryId.setText(model.getValueAt(SelectedRowIndex, 0).toString());
-        txtCountryName.setText(model.getValueAt(SelectedRowIndex, 1).toString());
-        txtCountryRegion.setText(model.getValueAt(SelectedRowIndex, 2).toString());
+        txtCountryId.setText(model.getValueAt(SelectedRowIndex, 1).toString());
+        txtCountryName.setText(model.getValueAt(SelectedRowIndex, 2).toString());
+        txtCountryRegion.setText(model.getValueAt(SelectedRowIndex, 3).toString());
     }//GEN-LAST:event_tableCountryMouseClicked
 
     private void txtCountrySearchKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCountrySearchKeyTyped

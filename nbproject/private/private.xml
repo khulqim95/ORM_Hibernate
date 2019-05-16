@@ -3,13 +3,19 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/Netbeans/Orm/src/hibernate.cfg.xml</file>
-            <file>file:/D:/Netbeans/Orm/src/Daos/RegionDAO.java</file>
-            <file>file:/D:/Netbeans/Orm/src/tools/ORM_Latihan.java</file>
-            <file>file:/D:/Netbeans/Orm/src/Controller/CountryController.java</file>
-            <file>file:/D:/Netbeans/Orm/src/Controller/DepartmentController.java</file>
-            <file>file:/D:/Netbeans/Orm/src/Icontroller/IDepartmentController.java</file>
-            <file>file:/D:/Netbeans/Orm/src/Icontroller/ICountryController.java</file>
+            <file>file:/E:/MetroData/Project/ORM/src/controllers/LocationController.java</file>
+            <file>file:/E:/MetroData/Project/ORM/src/views/JILocationView.java</file>
+            <file>file:/E:/MetroData/Project/ORM/src/idaos/IRegionDAO.java</file>
+            <file>file:/E:/MetroData/Project/ORM/src/tools/ORM.java</file>
+            <file>file:/E:/MetroData/Project/ORM/src/daos/EmployeeDAO.java</file>
+            <file>file:/E:/MetroData/Project/ORM/src/daos/RegionDAO.java</file>
+            <file>file:/E:/MetroData/Project/ORM/src/views/JEmployeeView.java</file>
+            <file>file:/E:/MetroData/Project/ORM/src/views/JIRegionView.java</file>
+            <file>file:/E:/MetroData/Project/ORM/src/models/Region.java</file>
+            <file>file:/E:/MetroData/Project/ORM/src/controllers/EmployeeController.java</file>
+            <file>file:/E:/MetroData/Project/ORM/src/controllers/RegionController.java</file>
+            <file>file:/E:/MetroData/Project/ORM/src/icontrollers/IRegionController.java</file>
+            <file>file:/E:/MetroData/Project/ORM/src/Controller/RegionController.java</file>
         </group>
     </open-files>
 </project-private>

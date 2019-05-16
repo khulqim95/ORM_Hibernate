@@ -3,17 +3,18 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Icontroller;
+package idaos;
 
-import Models.Employee;
 import java.util.List;
+import models.Employee;
 
 /**
  *
- * @author WIN7
+ * @author yosef
  */
-public interface IDepartmentController {
-    
-  public String update(String id, String name,String Manager_id, String Location_id);
-    
+public interface IEmployeeDAO {
+
+    public List<Employee> search(Object key);
+
+    public List<Employee> getAll();
 }

@@ -6,7 +6,7 @@
 package Idaos;
 
 
-import Models.Department;
+import models.Department;
 import java.util.List;
 
 /**
@@ -16,6 +16,9 @@ import java.util.List;
 public interface IDepartmentDAO {
    
     public boolean update(Department d);
+    
+     public List<Department> getAll();
+     public List<Department> search (String key);
 
    
 }

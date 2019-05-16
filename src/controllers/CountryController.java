@@ -8,8 +8,8 @@ package Controller;
 import Daos.CountryDAO;
 import Icontroller.ICountryController;
 import Idaos.ICountryDAO;
-import Models.Country;
-import Models.Region;
+import models.Country;
+import models.Region;
 import java.math.BigDecimal;
 import java.util.List;
 import org.hibernate.SessionFactory;
@@ -26,7 +26,6 @@ public class CountryController implements ICountryController{
         icdao = new CountryDAO();
     }
 
-    @Override
     public List<Country> getAll() {
         return icdao.getAll();
         

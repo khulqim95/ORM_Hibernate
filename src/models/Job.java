@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Models;
+package models;
 
 import java.io.Serializable;
 import java.util.List;
@@ -22,7 +22,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author WIN7
+ * @author yosef
  */
 @Entity
 @Table(name = "JOBS")
@@ -125,7 +125,7 @@ public class Job implements Serializable {
 
     @Override
     public String toString() {
-        return "Models.Job[ jobId=" + jobId + " ]";
+        return "models.Job[ jobId=" + jobId + " ]";
     }
     
 }
