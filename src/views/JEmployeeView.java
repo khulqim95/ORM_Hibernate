@@ -40,7 +40,7 @@ public class JEmployeeView extends javax.swing.JInternalFrame {
     }
     
     public void resetTextEmployee(){
-        txtEmpId.setText("");
+        txtEmpId.setText("0");
         txtFirstName.setText("");
         txtLastName.setText("");
         txtEmail.setText("");
@@ -51,14 +51,14 @@ public class JEmployeeView extends javax.swing.JInternalFrame {
         txtComm.setText("");
         cmbManagerId.setSelectedIndex(0);
         cmbDepartmentId.setSelectedIndex(0);
-        txtEmpId.setEditable(true);
+        txtEmpId.setEditable(false);
         btnInsert.setEnabled(true);
         btnUpdate.setEnabled(true);
         getDataComboJobID();
     }
     
     public void showTableEmployee(String s){
-        DefaultTableModel model = (DefaultTableModel)tableEmployee.getModel();
+        DefaultTableModel model = (DefaultTableModel) tableEmployee.getModel();
         Object[] row = new Object[12];
         List<Employee> employees = new ArrayList<>();
         employees = iec.search(s);
@@ -66,45 +66,47 @@ public class JEmployeeView extends javax.swing.JInternalFrame {
             employees = iec.getAll();
         }
         for (int i = 0; i < employees.size(); i++) {
-            row[0]=i+1;
-            row[1]=employees.get(i).getEmployeeId();
-            row[2]=employees.get(i).getFirstName();
-            row[3]=employees.get(i).getLastName();
-            row[4]=employees.get(i).getEmail();
-            row[5]=employees.get(i).getPhoneNumber();
-            row[6]=employees.get(i).getHireDate();
-            
-            if(employees.get(i).getJobId()== null){
+            row[0] = i + 1;
+            row[1] = employees.get(i).getEmployeeId();
+            row[2] = employees.get(i).getFirstName();
+            row[3] = employees.get(i).getLastName();
+            row[4] = employees.get(i).getEmail();
+            row[5] = employees.get(i).getPhoneNumber();
+            row[6] = employees.get(i).getHireDate();
+
+            if (employees.get(i).getJobId() == null) {
                 row[7] = "";
             } else {
-                row[7]=employees.get(i).getJobId().getJobId() + " - " + employees.get(i).getJobId().getJobTitle();
+                row[7] = employees.get(i).getJobId().getJobId() 
+                        + " - " + employees.get(i).getJobId().getJobTitle();
             }
-            
-            row[8]=employees.get(i).getSalary();
-            
-             if(employees.get(i).getCommissionPct()== null){
+
+            row[8] = employees.get(i).getSalary();
+
+            if (employees.get(i).getCommissionPct() == null) {
                 row[9] = "";
             } else {
-                row[9]=employees.get(i).getCommissionPct();
+                row[9] = employees.get(i).getCommissionPct();
             }
-           
-            
-            if(employees.get(i).getManagerId() == null){
+
+            if (employees.get(i).getManagerId() == null) {
                 row[10] = "";
             } else {
-                row[10]=employees.get(i).getManagerId().getEmployeeId() + " - " + employees.get(i).getManagerId().getLastName();
+                row[10] = employees.get(i).getManagerId().getEmployeeId() 
+                        + " - " + employees.get(i).getManagerId().getLastName();
             }
-            
-            if(employees.get(i).getDepartmentId() == null){
+
+            if (employees.get(i).getDepartmentId() == null) {
                 row[11] = "";
             } else {
-                row[11]=employees.get(i).getDepartmentId().getDepartmentId() + " - " + employees.get(i).getDepartmentId().getDepartmentName();
+                row[11] = employees.get(i).getDepartmentId().getDepartmentId() 
+                        + " - " + employees.get(i).getDepartmentId().getDepartmentName();
             }
-            
+
             model.addRow(row);
         }
     }
-    
+
     public void updateTableEmployee(String s){
         DefaultTableModel model = (DefaultTableModel)tableEmployee.getModel();
 //        List<Country> countries = new ArrayList<>();
@@ -287,6 +289,7 @@ public class JEmployeeView extends javax.swing.JInternalFrame {
         });
 
         txtEmpId.setEditable(false);
+        txtEmpId.setText("0");
 
         cmbManagerId.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ManagerID" }));
 
@@ -370,12 +373,12 @@ public class JEmployeeView extends javax.swing.JInternalFrame {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(9, 9, 9)
-                        .addComponent(jLabel2)
-                        .addGap(18, 18, 18)
+                        .addGap(41, 41, 41)
                         .addComponent(jLabel3))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(txtEmpId, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtEmpId, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel2))
                         .addGap(18, 18, 18)
                         .addComponent(txtFirstName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
@@ -438,6 +441,11 @@ public class JEmployeeView extends javax.swing.JInternalFrame {
         String dprtmnid = cmbDepartmentId.getSelectedItem().toString();
         String mngrid = cmbManagerId.getSelectedItem().toString();
         
+        jbid = jbid.substring(0, jbid.indexOf(" - "));
+        dprtmnid = dprtmnid.substring(0, dprtmnid.indexOf(" - "));
+        mngrid = mngrid.substring(0, mngrid.indexOf(" - "));
+
+        
         int confirm = JOptionPane.showConfirmDialog(this, "Apakah anda yakin untuk melakukan insert?", "Confirm Insert", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
         if(confirm==JOptionPane.YES_OPTION){
             JOptionPane.showMessageDialog(null, iec.insert(txtEmpId.getText(), txtFirstName.getText(), txtLastName.getText(), txtEmail.getText(), txtPhoneNumber.getText(), txtHireDate.getText(), jbid, txtSalary.getText(), txtComm.getText(), mngrid, dprtmnid));
@@ -460,6 +468,7 @@ public class JEmployeeView extends javax.swing.JInternalFrame {
         int SelectedRowIndex = tableEmployee.getSelectedRow();
 
         txtEmpId.setEditable(false);
+        btnInsert.setEnabled(false);
 
         txtEmpId.setText(model.getValueAt(SelectedRowIndex, 1).toString());
         txtFirstName.setText(model.getValueAt(SelectedRowIndex, 2).toString());
