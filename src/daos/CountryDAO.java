@@ -4,6 +4,7 @@ import entities.Country;
 import entities.Employee;
 import entities.Location;
 import idaos.ICountryDAO;
+import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -94,8 +95,31 @@ public class CountryDAO implements ICountryDAO {
     }
 
     @Override
-    public Country search(String keyword) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public List<Country> search(String keyword) {
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        List<Country> countries = new ArrayList<>();
+        try {
+            session = sessionFactory.openSession();
+            transaction = session.beginTransaction();
+            //getSimpleName adalah 
+            String hql = "FROM " + Country.class.getSimpleName() + " WHERE ";
+            for (Field field : Country.class.getDeclaredFields()) {
+                if (!field.getName().contains("UID") && !field.getName().contains("List"))
+                hql += field.getName()+ " LIKE '%" + keyword + "%' OR ";
+            }
+            hql = hql.substring(0, hql.lastIndexOf(" OR "));
+            hql += " ORDER BY 1";
+            countries = session.createQuery(hql).list();
+            transaction.commit();
+        } catch (Exception ex) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            ex.printStackTrace();
+        } finally {
+            session.close();
+        }
+        return countries;
     }
 
     @Override

@@ -13,7 +13,7 @@ public interface ICountryDAO {
     public Country getById(String countryId);
     public boolean insert(Country country);
     
-    public Country search(String keyword);
+    public List<Country> search(String keyword);
     public boolean update(Country country);
     public boolean delete(Country country);
 }

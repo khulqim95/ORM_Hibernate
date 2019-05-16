@@ -3,6 +3,7 @@ package tools;
 import static com.sun.org.apache.xalan.internal.lib.ExsltDatetime.date;
 import controllers.CountryController;
 import controllers.EmployeeController;
+import controllers.LocationController;
 import daos.CountryDAO;
 import daos.EmployeeDAO;
 import daos.LocationDAO;
@@ -48,6 +49,12 @@ public class ManualTester {
 //        CountryController countryController = new CountryController(sessionFactory);
 //        System.out.println(countryController.getById("XX").getCountryName());
         
+//        LocationDAO xxx = new LocationDAO(sessionFactory);
+//        for (Location location : xxx.search("Argentina")) {
+//            System.out.println(location.getStreetAddress());
+//        }
+//        System.out.println(xxx.search());
+        
 
         //delete employee dao
 //        Employee employee = new Employee(208);
@@ -60,6 +67,18 @@ public class ManualTester {
         //insert employee controller
 //        EmployeeController employeeController = new EmployeeController(sessionFactory);
 //        System.out.println(employeeController.insert("0", "Roro", "Gita", "RRACHMA", "515123890", "07/08/2019", "12008", ".23", "110", "101", "AC_ACCOUNT"));
+
+        //insert country controller
+//        LocationController locationController = new LocationController(sessionFactory);
+//        System.out.println(locationController.insert("0", "600 RCH House", "7890", "Semarang", "Jateng", "UK"));
+
+        //update country controller
+//        LocationController locationController = new LocationController(sessionFactory);
+//        System.out.println(locationController.update("3500", "700 RGT House", "5733", "Salatiga", "Jateng", "JP"));
+
+        //delete country controller
+//        LocationController locationController = new LocationController(sessionFactory);
+//        System.out.println(locationController.delete("3600"));
 
 //        ====================================================================================
 
@@ -111,5 +130,6 @@ public class ManualTester {
 
         //untuk melakukam proses search
 //        System.out.println(regionDAO.search("Asia").getRegionId());
+
     }
 }

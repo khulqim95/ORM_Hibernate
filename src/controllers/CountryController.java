@@ -47,8 +47,9 @@ public class CountryController implements ICountryController{
     }
 
     @Override
-    public List<Country> search(Object keyword) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public List<Country> search(String keyword) {
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return icdao.search(keyword);
     }
 
     @Override

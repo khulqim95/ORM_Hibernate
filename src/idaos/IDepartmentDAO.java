@@ -11,7 +11,7 @@ import java.util.List;
 public interface IDepartmentDAO {
     public List<Department> getAll();
     public Department getById(BigDecimal departmentId);
-    public Department search(String keyword);
+    public List<Department> search(String keyword);
     public boolean insert(Department department);
     public boolean update(Department department);
     public boolean delete(Department department);

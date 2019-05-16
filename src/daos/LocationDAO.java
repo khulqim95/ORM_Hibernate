@@ -22,23 +22,26 @@ public class LocationDAO implements ILocationDAO {
     private Session session = null;
     private Transaction transaction = null;
 
-    public LocationDAO(SessionFactory factory) {
-        this.sessionFactory = factory;
+    public LocationDAO(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
     }
 
     @Override
     public List<Location> getAll() {
         List<Location> locations = new ArrayList<>();
         try {
-            session = sessionFactory.openSession();
-            transaction = session.beginTransaction();
-            locations = session.createQuery("FROM Location").list();
+            session = sessionFactory.openSession(); //pembukaan sesinya
+            transaction = session.beginTransaction(); //kemudian pembukaan session untuk transaksi
+//            transaction.begin(); //mulai transaksi
+            locations = session.createQuery("FROM Location").list(); //Location kita isikan dengan mengambil data dari object Region
             transaction.commit();
-        } catch (Exception ex) {
+        } catch (Exception e) {
             if (transaction != null) {
                 transaction.rollback();
             }
-            ex.printStackTrace();
+            
+            System.out.println(e.getMessage());
+            e.printStackTrace();
         } finally {
             session.close();
         }
@@ -72,9 +75,11 @@ public class LocationDAO implements ILocationDAO {
         try {
             session = sessionFactory.openSession();
             transaction = session.beginTransaction();
+            //getSimpleName adalah 
             String hql = "FROM " + Location.class.getSimpleName() + " WHERE ";
             for (Field field : Location.class.getDeclaredFields()) {
-                hql += field.getName() + " LIKE '%" + keyword + "%' OR ";
+                if (!field.getName().contains("UID") && !field.getName().contains("List"))
+                hql += field.getName()+ " LIKE '%" + keyword + "%' OR ";
             }
             hql = hql.substring(0, hql.lastIndexOf(" OR "));
             hql += " ORDER BY 1";

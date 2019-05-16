@@ -1,6 +1,7 @@
 package views;
 
 import controllers.CountryController;
+import controllers.RegionController;
 import entities.Country;
 import entities.Region;
 import icontrollers.ICountryController;
@@ -17,14 +18,14 @@ import tools.HibernateUtil;
  * @author RR17
  */
 public class JCountryView extends javax.swing.JInternalFrame {
-
-    SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+    private SessionFactory sessionFactory = HibernateUtil.getSessionFactory(); //masuk koneksi pintu utama (masuk ke table HR)
+    private Session session = null; //masuk ke koneksi dalam yg sudah ada tujuan(hanya beberapa sesi2)
     ICountryController icc = new CountryController(sessionFactory);
 
     public JCountryView() {
         initComponents();
-        showTableCountry();
-//        getDataComboRegionId();
+        showTableCountry("");
+        getDataComboRegionID();
     }
     
     public void resetTextCountry(){
@@ -33,30 +34,39 @@ public class JCountryView extends javax.swing.JInternalFrame {
         txtCountryId.setEditable(true);
         btnInsert.setEnabled(true);
         btnUpdate.setEnabled(true);
-//        getDataComboRegionId();
+        getDataComboRegionID();
         cmbRegionId.setSelectedIndex(0);
     }
     
-    public void showTableCountry(){
+    public void showTableCountry(String s){
         DefaultTableModel model = (DefaultTableModel)tableCountry.getModel();
         Object[] row = new Object[4];
         List<Country> countries = new ArrayList<>();
-        countries = icc.getAll();
+        countries = icc.search(s);
+        if (s.isEmpty()) {
+            countries = icc.getAll();
+        }
         for (int i = 0; i < countries.size(); i++) {
             row[0]=i+1;
             row[1]=countries.get(i).getCountryId();
             row[2]=countries.get(i).getCountryName();
-            row[3]=countries.get(i).getRegionId();
+            row[3]=countries.get(i).getRegionId().getRegionId();
             
             model.addRow(row);
         }
     }
     
-    public void updateTableCountry(){
+    public void updateTableCountry(String s){
         DefaultTableModel model = (DefaultTableModel)tableCountry.getModel();
 //        List<Country> countries = new ArrayList<>();
         model.setRowCount(0);
-        showTableCountry();
+        showTableCountry(s);
+    }
+    
+    private void getDataComboRegionID(){
+        for(Region region : new RegionController(sessionFactory).getAll()){
+            cmbRegionId.addItem(region.getRegionId()+ " - " + region.getRegionName());
+        }
     }
 
     /**
@@ -78,7 +88,7 @@ public class JCountryView extends javax.swing.JInternalFrame {
         btnDelete = new javax.swing.JButton();
         btnUpdate = new javax.swing.JButton();
         btnInsert = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        btnReset = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         txtSearch = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -93,7 +103,7 @@ public class JCountryView extends javax.swing.JInternalFrame {
 
         jLabel3.setText("Region ID");
 
-        cmbRegionId.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Region ID", "1", "2", "3", "4" }));
+        cmbRegionId.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Region ID" }));
 
         btnDelete.setText("Delete");
         btnDelete.addActionListener(new java.awt.event.ActionListener() {
@@ -103,6 +113,11 @@ public class JCountryView extends javax.swing.JInternalFrame {
         });
 
         btnUpdate.setText("Update");
+        btnUpdate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUpdateActionPerformed(evt);
+            }
+        });
 
         btnInsert.setText("Insert");
         btnInsert.addActionListener(new java.awt.event.ActionListener() {
@@ -111,9 +126,20 @@ public class JCountryView extends javax.swing.JInternalFrame {
             }
         });
 
-        jButton4.setText("Reset");
+        btnReset.setText("Reset");
+        btnReset.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnResetActionPerformed(evt);
+            }
+        });
 
         jLabel4.setText("Search");
+
+        txtSearch.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtSearchKeyTyped(evt);
+            }
+        });
 
         tableCountry.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -151,7 +177,7 @@ public class JCountryView extends javax.swing.JInternalFrame {
                                     .addComponent(jLabel2)
                                     .addComponent(jLabel1)
                                     .addComponent(jLabel3)
-                                    .addComponent(jButton4))
+                                    .addComponent(btnReset))
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
                                         .addGap(68, 68, 68)
@@ -194,7 +220,7 @@ public class JCountryView extends javax.swing.JInternalFrame {
                     .addComponent(btnDelete)
                     .addComponent(btnUpdate)
                     .addComponent(btnInsert)
-                    .addComponent(jButton4))
+                    .addComponent(btnReset))
                 .addGap(42, 42, 42)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
@@ -228,28 +254,43 @@ public class JCountryView extends javax.swing.JInternalFrame {
         int confirm = JOptionPane.showConfirmDialog(this, "Apakah anda yakin untuk melakukan insert?", "Confirm Insert", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
         if(confirm==JOptionPane.YES_OPTION){
             JOptionPane.showMessageDialog(null, icc.insert(txtCountryId.getText(), txtCountryName.getText(), rgnId));
-            updateTableCountry();
+            updateTableCountry("");
             resetTextCountry();
         }
     }//GEN-LAST:event_btnInsertActionPerformed
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
         // TODO add your handling code here:
-//        int confirm = JOptionPane.showConfirmDialog(this, "Apakah anda yakin untuk melakukan delete?", "Confirm Update", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-//        if(confirm==JOptionPane.YES_OPTION){
-//            JOptionPane.showMessageDialog(null, icc.delete(txtCountryId.getText()));
-//            updateTableCountry();
-//            resetTextCountry();
-//        }
+        int confirm = JOptionPane.showConfirmDialog(this, "Apakah anda yakin untuk melakukan delete?", "Confirm Update", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+        if(confirm==JOptionPane.YES_OPTION){
+            JOptionPane.showMessageDialog(null, icc.delete(txtCountryId.getText()));
+            updateTableCountry("");
+            resetTextCountry();
+        }
     }//GEN-LAST:event_btnDeleteActionPerformed
+
+    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnUpdateActionPerformed
+
+    private void txtSearchKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSearchKeyTyped
+        // TODO add your handling code here:
+//        txtSearch.getText();
+        updateTableCountry(txtSearch.getText());
+    }//GEN-LAST:event_txtSearchKeyTyped
+
+    private void btnResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetActionPerformed
+        // TODO add your handling code here:
+        resetTextCountry();
+    }//GEN-LAST:event_btnResetActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnInsert;
+    private javax.swing.JButton btnReset;
     private javax.swing.JButton btnUpdate;
     private javax.swing.JComboBox<String> cmbRegionId;
-    private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

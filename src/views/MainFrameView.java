@@ -28,6 +28,8 @@ public class MainFrameView extends javax.swing.JFrame {
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         menuCountry = new javax.swing.JMenuItem();
+        menuEmployee = new javax.swing.JMenuItem();
+        menuLocation = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -51,6 +53,22 @@ public class MainFrameView extends javax.swing.JFrame {
             }
         });
         jMenu1.add(menuCountry);
+
+        menuEmployee.setText("Employee");
+        menuEmployee.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuEmployeeActionPerformed(evt);
+            }
+        });
+        jMenu1.add(menuEmployee);
+
+        menuLocation.setText("Location");
+        menuLocation.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuLocationActionPerformed(evt);
+            }
+        });
+        jMenu1.add(menuLocation);
 
         jMenuBar1.add(jMenu1);
 
@@ -76,6 +94,20 @@ public class MainFrameView extends javax.swing.JFrame {
         this.jDesktopPane1.add(jcv);
         jcv.show();
     }//GEN-LAST:event_menuCountryActionPerformed
+
+    private void menuEmployeeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuEmployeeActionPerformed
+        // TODO add your handling code here:
+        JEmployeeView jev = new JEmployeeView();
+        this.jDesktopPane1.add(jev);
+        jev.show();
+    }//GEN-LAST:event_menuEmployeeActionPerformed
+
+    private void menuLocationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuLocationActionPerformed
+        // TODO add your handling code here:
+        JLocationView jlv = new JLocationView();
+        this.jDesktopPane1.add(jlv);
+        jlv.show();
+    }//GEN-LAST:event_menuLocationActionPerformed
 
     /**
      * @param args the command line arguments
@@ -120,5 +152,7 @@ public class MainFrameView extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem menuCountry;
+    private javax.swing.JMenuItem menuEmployee;
+    private javax.swing.JMenuItem menuLocation;
     // End of variables declaration//GEN-END:variables
 }

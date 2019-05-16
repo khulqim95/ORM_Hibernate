@@ -28,17 +28,20 @@ public class EmployeeController implements IEmployeeController {
 
     @Override
     public List<Employee> getAll() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return iedao.getAll();
     }
 
     @Override
     public Employee getById(String employeeId) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return iedao.getById(BigDecimal.ONE);
     }
 
     @Override
-    public List<Employee> search(Object keyword) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public List<Employee> search(String keyword) {
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return iedao.search(keyword);
     }
 
     @Override

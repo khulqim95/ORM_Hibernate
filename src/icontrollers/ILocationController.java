@@ -10,7 +10,7 @@ import java.util.List;
  */
 public interface ILocationController {
     public List<Location> getAll();
-    public Location getById(String id);
+    public Location getById(String locationId);
     public List<Location> search(String keyword);
     public String insert(String locationId, String streetAddress, String postalCode, String city, String stateProvince, String countryId);
     public String update(String locationId, String streetAddress, String postalCode, String city, String stateProvince, String countryId);

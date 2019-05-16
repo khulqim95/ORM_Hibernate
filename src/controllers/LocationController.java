@@ -1,6 +1,7 @@
 package controllers;
 
 import daos.LocationDAO;
+import entities.Country;
 import entities.Location;
 import icontrollers.ILocationController;
 import idaos.ILocationDAO;
@@ -16,9 +17,9 @@ import org.hibernate.SessionFactory;
 public class LocationController implements ILocationController {
 
     private ILocationDAO ildao;
-
-    public LocationController(SessionFactory factory) {
-        ildao = new LocationDAO(factory);
+    
+    public LocationController(SessionFactory sessionFactory){
+        ildao = new LocationDAO(sessionFactory);
     }
 
     @Override
@@ -27,8 +28,8 @@ public class LocationController implements ILocationController {
     }
 
     @Override
-    public Location getById(String id) {
-        return ildao.getById(Integer.parseInt(id));
+    public Location getById(String locationId) {
+        return ildao.getById(Integer.parseInt(locationId));
     }
 
     @Override
@@ -44,7 +45,7 @@ public class LocationController implements ILocationController {
             result = "Data locationId atau city wajib diisi";
         } else {
             if (ildao.insert(location)) {
-                result = "true";
+                result = "Data berhasil ditambahkan";
             }
         }
         return result;
@@ -58,7 +59,7 @@ public class LocationController implements ILocationController {
             result = "Data locationId atau city tidak boleh kosong";
         } else {
             if (ildao.update(location)) {
-                result = "true";
+                result = "Data berhasil diupdate";
             }
         }
         return result;
@@ -68,7 +69,7 @@ public class LocationController implements ILocationController {
     public String delete(String locationId) {
         String result = "Data tidak berhasil dihapus";
         if (ildao.delete(Integer.parseInt(locationId))) {
-            result = "true";
+            result = "Data berhasil dihapus";
         }
         return result;
     }

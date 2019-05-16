@@ -11,7 +11,7 @@ import java.util.List;
 public interface IEmployeeDAO {
     public List<Employee> getAll();
     public Employee getById(BigDecimal employeeId);
-    public Employee search(String keyword);
+    public List<Employee> search(String keyword);
     public boolean insert(Employee employee);
     public boolean update(Employee employee);
     

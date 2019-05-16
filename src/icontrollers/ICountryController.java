@@ -13,7 +13,7 @@ public interface ICountryController {
     public Country getById(String countryId);
     public String insert (String countryId, String countryName, String regionId);
     
-    public List<Country> search(Object keyword);
+    public List<Country> search(String keyword);
     public String update (String countryId, String countryName, Region regionId);
     public String delete (String countryId);
 }

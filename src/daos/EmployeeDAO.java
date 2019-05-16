@@ -9,7 +9,9 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import tools.HibernateUtil;
 import idaos.IEmployeeDAO;
+import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -28,7 +30,25 @@ public class EmployeeDAO implements IEmployeeDAO {
 
     @Override
     public List<Employee> getAll() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        List<Employee> employees = new ArrayList<>();
+        try {
+            session = sessionFactory.openSession(); //pembukaan sesinya
+            transaction = session.beginTransaction(); //kemudian pembukaan session untuk transaksi
+//            transaction.begin(); //mulai transaksi
+            employees = session.createQuery("FROM Employee").list(); //jobs kita isikan dengan mengambil data dari object Region
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+        return employees;
     }
 
     @Override
@@ -37,8 +57,31 @@ public class EmployeeDAO implements IEmployeeDAO {
     }
 
     @Override
-    public Employee search(String keyword) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public List<Employee> search(String keyword) {
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        List<Employee> employees = new ArrayList<>();
+        try {
+            session = sessionFactory.openSession();
+            transaction = session.beginTransaction();
+            //getSimpleName adalah 
+            String hql = "FROM " + Employee.class.getSimpleName() + " WHERE ";
+            for (Field field : Employee.class.getDeclaredFields()) {
+                if (!field.getName().contains("UID") && !field.getName().contains("List"))
+                hql += field.getName()+ " LIKE '%" + keyword + "%' OR ";
+            }
+            hql = hql.substring(0, hql.lastIndexOf(" OR "));
+            hql += " ORDER BY 1";
+            employees = session.createQuery(hql).list();
+            transaction.commit();
+        } catch (Exception ex) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            ex.printStackTrace();
+        } finally {
+            session.close();
+        }
+        return employees;
     }
 
     @Override

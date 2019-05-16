@@ -5,21 +5,25 @@
  */
 package views;
 
+import controllers.CountryController;
 import controllers.LocationController;
+import entities.Country;
 import entities.Location;
 import icontrollers.ILocationController;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import tools.HibernateUtil;
 
 /**
  *
  * @author RR17
  */
 public class JLocationView extends javax.swing.JInternalFrame {
-    private SessionFactory sessionFactory = null; //masuk koneksi pintu utama (masuk ke table HR)
+    private SessionFactory sessionFactory = HibernateUtil.getSessionFactory(); //masuk koneksi pintu utama (masuk ke table HR)
     private Session session = null; //masuk ke koneksi dalam yg sudah ada tujuan(hanya beberapa sesi2)
     ILocationController ilc = new LocationController(sessionFactory);
     
@@ -46,21 +50,23 @@ public class JLocationView extends javax.swing.JInternalFrame {
         cmbCountryID.setSelectedIndex(0);
     }
     
-    public void showTableLocation(String key){
+    public void showTableLocation(String s){
         DefaultTableModel model = (DefaultTableModel)tableLocation.getModel();
         Object[] row = new Object[7];
-        List<Location> location = ilc.search(key);
-        if (key.isEmpty()) {
-            location = ilc.getAll();
+        List<Location> locations = new ArrayList<>();
+        locations = ilc.search(s);
+        if (s.isEmpty()) {
+            locations = ilc.getAll();
         }
-        for (int i = 0; i < location.size(); i++) {
+        for (int i = 0; i < locations.size(); i++) {
             row[0]=i+1;
-            row[1]=location.get(i).getCountryId();
-            row[2]=location.get(i).getStreetAddress();
-            row[3]=location.get(i).getPostalCode();
-            row[4]=location.get(i).getCity();
-            row[5]=location.get(i).getStateProvince();
-            row[6]=location.get(i).getCountryId();
+            row[1]=locations.get(i).getLocationId();
+            row[2]=locations.get(i).getStreetAddress();
+            row[3]=locations.get(i).getPostalCode();
+            row[4]=locations.get(i).getCity();
+            row[5]=locations.get(i).getStateProvince();
+            row[6]=locations.get(i).getCountryId().getCountryId();
+            
             model.addRow(row);
         }
     }
@@ -69,6 +75,12 @@ public class JLocationView extends javax.swing.JInternalFrame {
         DefaultTableModel model = (DefaultTableModel)tableLocation.getModel();
         model.setRowCount(0);
         showTableLocation(s);
+    }
+    
+     private void getDataComboCountryID(){
+        for(Country country : new CountryController(sessionFactory).getAll()){
+            cmbCountryID.addItem(country.getCountryId()+ " - " + country.getCountryName());
+        }
     }
 
     /**
@@ -132,6 +144,12 @@ public class JLocationView extends javax.swing.JInternalFrame {
 
         jLabel8.setText("Search");
 
+        txtSearch.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtSearchKeyTyped(evt);
+            }
+        });
+
         btnUpdate.setText("Update");
 
         btnInsert.setText("Insert");
@@ -172,6 +190,11 @@ public class JLocationView extends javax.swing.JInternalFrame {
         jScrollPane2.setViewportView(tableLocation);
 
         btnReset.setText("Reset");
+        btnReset.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnResetActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -273,7 +296,12 @@ public class JLocationView extends javax.swing.JInternalFrame {
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
         // TODO add your handling code here:
-        
+        int confirm = JOptionPane.showConfirmDialog(this, "Apakah anda yakin untuk melakukan delete?", "Confirm Update", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+        if(confirm==JOptionPane.YES_OPTION){
+            JOptionPane.showMessageDialog(null, ilc.delete(txtLocationId.getText()));
+            updateTableLocation("");
+//            resetTextLocation();
+        }
     }//GEN-LAST:event_btnDeleteActionPerformed
 
     private void tableLocationMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableLocationMouseClicked
@@ -293,16 +321,25 @@ public class JLocationView extends javax.swing.JInternalFrame {
     private void btnInsertActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInsertActionPerformed
         // TODO add your handling code here:
         String countryID = cmbCountryID.getSelectedItem().toString();
-        String ctr = countryID.substring(0, countryID.indexOf("-")-1);
-                
+        String ctr = countryID.substring(0, countryID.indexOf("-")-1);        
         
         int confirm = JOptionPane.showConfirmDialog(this, "Apakah anda yakin untuk melakukan insert?", "Confirm Insert", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
         if(confirm==JOptionPane.YES_OPTION){
-            JOptionPane.showMessageDialog(null, ilc.(txtLocationID.getText(), txtStreetAddress.getText(), txtPostalCode.getText(), txtCity.getText(), txtStateProvince.getText(), ctr));
+            JOptionPane.showMessageDialog(null, ilc.insert(txtLocationId.getText(), txtStreetAddress.getText(), txtPostalCode.getText(), txtCity.getText(), txtStateProvince.getText(), ctr));
             updateTableLocation("");
             resetTextLocation();
         }
     }//GEN-LAST:event_btnInsertActionPerformed
+
+    private void txtSearchKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSearchKeyTyped
+        // TODO add your handling code here:
+        updateTableLocation(txtSearch.getText());
+    }//GEN-LAST:event_txtSearchKeyTyped
+
+    private void btnResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetActionPerformed
+        // TODO add your handling code here:
+        resetTextLocation();
+    }//GEN-LAST:event_btnResetActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

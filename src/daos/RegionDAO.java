@@ -22,8 +22,8 @@ public class RegionDAO implements IRegionDAO {
     private Session session = null; //masuk ke koneksi dalam yg sudah ada tujuan(hanya beberapa sesi2)
     private Transaction transaction = null;
 
-    public RegionDAO() {
-        this.sessionFactory = HibernateUtil.getSessionFactory();
+    public RegionDAO(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
     }
 
     @Override
