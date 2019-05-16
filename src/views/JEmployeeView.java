@@ -13,8 +13,14 @@ import entities.Department;
 import entities.Employee;
 import entities.Job;
 import icontrollers.IEmployeeController;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import org.hibernate.Session;
@@ -30,6 +36,11 @@ public class JEmployeeView extends javax.swing.JInternalFrame {
     private SessionFactory sessionFactory = HibernateUtil.getSessionFactory(); //masuk koneksi pintu utama (masuk ke table HR)
     private Session session = null; //masuk ke koneksi dalam yg sudah ada tujuan(hanya beberapa sesi2)
     IEmployeeController iec = new EmployeeController(sessionFactory);
+
+//    TimeZone tz = TimeZone.getDefault();
+//    LocalDate localDate = LocalDate.now();
+    Date date = new Date(); // this object contains the current date value 
+    SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
     
     public JEmployeeView() {
         initComponents();
@@ -46,6 +57,9 @@ public class JEmployeeView extends javax.swing.JInternalFrame {
         txtEmail.setText("");
         txtPhoneNumber.setText("");
         txtHireDate.setText("");
+//        cmbHireDate.setSelectedDate(Calendar.getInstance(tz));
+        cmbHireDate.setSelectedDate(Calendar.getInstance(getLocale()));
+//        System.out.println(tz);
         cmbJobId.setSelectedIndex(0);
         txtSalary.setText("");
         txtComm.setText("");
@@ -72,7 +86,7 @@ public class JEmployeeView extends javax.swing.JInternalFrame {
             row[3] = employees.get(i).getLastName();
             row[4] = employees.get(i).getEmail();
             row[5] = employees.get(i).getPhoneNumber();
-            row[6] = employees.get(i).getHireDate();
+            row[6] = formatter.format(employees.get(i).getHireDate());
 
             if (employees.get(i).getJobId() == null) {
                 row[7] = "";
@@ -157,15 +171,7 @@ public class JEmployeeView extends javax.swing.JInternalFrame {
         jLabel10 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
-        txtSalary = new javax.swing.JTextField();
-        txtComm = new javax.swing.JTextField();
-        btnDelete = new javax.swing.JButton();
-        btnInsert = new javax.swing.JButton();
-        btnUpdate = new javax.swing.JButton();
-        btnReset = new javax.swing.JButton();
         jLabel14 = new javax.swing.JLabel();
-        cmbJobId = new javax.swing.JComboBox<>();
-        cmbDepartmentId = new javax.swing.JComboBox<>();
         jScrollPane2 = new javax.swing.JScrollPane();
         tableEmployee = new javax.swing.JTable();
         txtSearchEmp = new javax.swing.JTextField();
@@ -175,7 +181,16 @@ public class JEmployeeView extends javax.swing.JInternalFrame {
         txtEmail = new javax.swing.JTextField();
         txtPhoneNumber = new javax.swing.JTextField();
         txtHireDate = new javax.swing.JTextField();
+        cmbJobId = new javax.swing.JComboBox<>();
+        txtSalary = new javax.swing.JTextField();
+        txtComm = new javax.swing.JTextField();
         cmbManagerId = new javax.swing.JComboBox<>();
+        cmbDepartmentId = new javax.swing.JComboBox<>();
+        btnInsert = new javax.swing.JButton();
+        btnUpdate = new javax.swing.JButton();
+        btnDelete = new javax.swing.JButton();
+        btnReset = new javax.swing.JButton();
+        cmbHireDate = new datechooser.beans.DateChooserCombo();
 
         jButton4.setText("Reset");
 
@@ -225,39 +240,7 @@ public class JEmployeeView extends javax.swing.JInternalFrame {
 
         jLabel12.setText("Department ID");
 
-        btnDelete.setText("Delete");
-        btnDelete.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnDeleteActionPerformed(evt);
-            }
-        });
-
-        btnInsert.setText("Insert");
-        btnInsert.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnInsertActionPerformed(evt);
-            }
-        });
-
-        btnUpdate.setText("Update");
-        btnUpdate.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnUpdateActionPerformed(evt);
-            }
-        });
-
-        btnReset.setText("Reset");
-        btnReset.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnResetActionPerformed(evt);
-            }
-        });
-
         jLabel14.setText("Search");
-
-        cmbJobId.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "JobID" }));
-
-        cmbDepartmentId.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "DepartmentID" }));
 
         tableEmployee.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -291,7 +274,42 @@ public class JEmployeeView extends javax.swing.JInternalFrame {
         txtEmpId.setEditable(false);
         txtEmpId.setText("0");
 
+        cmbJobId.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "JobID" }));
+
         cmbManagerId.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ManagerID" }));
+
+        cmbDepartmentId.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "DepartmentID" }));
+
+        btnInsert.setText("Insert");
+        btnInsert.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnInsertActionPerformed(evt);
+            }
+        });
+
+        btnUpdate.setText("Update");
+        btnUpdate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUpdateActionPerformed(evt);
+            }
+        });
+
+        btnDelete.setText("Delete");
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteActionPerformed(evt);
+            }
+        });
+
+        btnReset.setText("Reset");
+        btnReset.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnResetActionPerformed(evt);
+            }
+        });
+
+        cmbHireDate.setFormat(0);
+        cmbHireDate.setWeekStyle(datechooser.view.WeekDaysStyle.SHORT);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -323,7 +341,8 @@ public class JEmployeeView extends javax.swing.JInternalFrame {
                                     .addComponent(txtLastName)
                                     .addComponent(txtEmail)
                                     .addComponent(txtPhoneNumber)
-                                    .addComponent(txtHireDate, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(txtHireDate, javax.swing.GroupLayout.DEFAULT_SIZE, 196, Short.MAX_VALUE)
+                                    .addComponent(cmbHireDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -373,8 +392,35 @@ public class JEmployeeView extends javax.swing.JInternalFrame {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(41, 41, 41)
-                        .addComponent(jLabel3))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(41, 41, 41)
+                                .addComponent(jLabel3))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(jLabel8)
+                                        .addComponent(cmbJobId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(38, 38, 38)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel9)
+                                            .addComponent(txtSalary, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGap(18, 18, 18)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                            .addComponent(txtComm, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jLabel10))))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
+                                .addComponent(cmbManagerId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(cmbDepartmentId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(btnDelete)
+                                    .addComponent(btnInsert)
+                                    .addComponent(btnReset)
+                                    .addComponent(btnUpdate))))
+                        .addGap(35, 35, 35))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(txtEmpId, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -395,41 +441,19 @@ public class JEmployeeView extends javax.swing.JInternalFrame {
                             .addComponent(txtPhoneNumber, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel6)
                             .addComponent(jLabel12))
-                        .addGap(21, 21, 21)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtHireDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel7)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(jLabel8)
-                                .addComponent(cmbJobId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(38, 38, 38)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel9)
-                                    .addComponent(txtSalary, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(txtComm, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel10))))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel7)
+                            .addComponent(cmbHireDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(cmbManagerId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(cmbDepartmentId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnDelete)
-                            .addComponent(btnInsert)
-                            .addComponent(btnReset)
-                            .addComponent(btnUpdate))))
-                .addGap(35, 35, 35)
+                        .addComponent(txtHireDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel14)
                     .addComponent(txtSearchEmp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(51, Short.MAX_VALUE))
+                .addContainerGap(45, Short.MAX_VALUE))
         );
 
         pack();
@@ -437,6 +461,7 @@ public class JEmployeeView extends javax.swing.JInternalFrame {
 
     private void btnInsertActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInsertActionPerformed
         // TODO add your handling code here:
+        
         String jbid = cmbJobId.getSelectedItem().toString();
         String dprtmnid = cmbDepartmentId.getSelectedItem().toString();
         String mngrid = cmbManagerId.getSelectedItem().toString();
@@ -444,11 +469,26 @@ public class JEmployeeView extends javax.swing.JInternalFrame {
         jbid = jbid.substring(0, jbid.indexOf(" - "));
         dprtmnid = dprtmnid.substring(0, dprtmnid.indexOf(" - "));
         mngrid = mngrid.substring(0, mngrid.indexOf(" - "));
-
         
+        date = cmbHireDate.getSelectedDate().getTime();
+        String hiredate = formatter.format(date);
+        
+//        System.out.println(txtEmpId.getText());
+//        System.out.println(txtFirstName.getText());
+//        System.out.println(txtLastName.getText());
+//        System.out.println(txtEmail.getText());
+//        System.out.println(txtPhoneNumber.getText());
+//        System.out.println(hiredate);
+//        System.out.println(jbid);
+//        System.out.println(txtSalary.getText());
+//        System.out.println(txtComm.getText());
+//        System.out.println(mngrid);
+//        System.out.println(dprtmnid);
+        
+        //        System.out.println(employeeController.insert("0", "Rere", "Uio", "WWindi", "515123890", "07/08/2019", "12008", "0.23", "110", "101", "AC_ACCOUNT"));
         int confirm = JOptionPane.showConfirmDialog(this, "Apakah anda yakin untuk melakukan insert?", "Confirm Insert", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
         if(confirm==JOptionPane.YES_OPTION){
-            JOptionPane.showMessageDialog(null, iec.insert(txtEmpId.getText(), txtFirstName.getText(), txtLastName.getText(), txtEmail.getText(), txtPhoneNumber.getText(), txtHireDate.getText(), jbid, txtSalary.getText(), txtComm.getText(), mngrid, dprtmnid));
+            JOptionPane.showMessageDialog(null, iec.insert("0", txtFirstName.getText(), txtLastName.getText(), txtEmail.getText(), txtPhoneNumber.getText(), hiredate, txtSalary.getText(), txtComm.getText(), dprtmnid, mngrid, jbid));
             updateTableEmployee("");
             resetTextEmployee();
         }
@@ -510,6 +550,7 @@ public class JEmployeeView extends javax.swing.JInternalFrame {
     private javax.swing.JButton btnReset;
     private javax.swing.JButton btnUpdate;
     private javax.swing.JComboBox<String> cmbDepartmentId;
+    private datechooser.beans.DateChooserCombo cmbHireDate;
     private javax.swing.JComboBox<String> cmbJobId;
     private javax.swing.JComboBox<String> cmbManagerId;
     private javax.swing.JButton jButton4;

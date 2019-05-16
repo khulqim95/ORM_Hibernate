@@ -66,7 +66,7 @@ public class ManualTester {
 
         //insert employee controller
 //        EmployeeController employeeController = new EmployeeController(sessionFactory);
-//        System.out.println(employeeController.insert("0", "Roro", "Gita", "RRACHMA", "515123890", "07/08/2019", "12008", ".23", "110", "101", "AC_ACCOUNT"));
+//        System.out.println(employeeController.insert("0", "Rere", "Uio", "WWindi", "515123890", "07/08/2019", "12008", "0.23", "110", "101", "AC_ACCOUNT"));
 
         //insert country controller
 //        LocationController locationController = new LocationController(sessionFactory);

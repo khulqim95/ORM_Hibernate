@@ -7,8 +7,12 @@ import entities.Job;
 import icontrollers.IEmployeeController;
 import idaos.IEmployeeDAO;
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.hibernate.SessionFactory;
 
 /**
@@ -17,9 +21,11 @@ import org.hibernate.SessionFactory;
  */
 public class EmployeeController implements IEmployeeController {
 
-    Date d = new Date();
-    java.util.Date date = new java.util.Date();
-    java.sql.Date sqlDate = new java.sql.Date(date.getTime());
+//    Date d = new Date();
+//    java.util.Date date = new java.util.Date();
+//    java.sql.Date sqlDate = new java.sql.Date(date.getTime());
+    Date date = new Date(); // this object contains the current date value 
+    SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
     private IEmployeeDAO iedao;
 
     public EmployeeController(SessionFactory factory) {
@@ -56,15 +62,20 @@ public class EmployeeController implements IEmployeeController {
 
     @Override
     public String insert(String employeeId, String firstName, String lastName, String email, String phoneNumber, String hireDate, String salary, String commissionPct, String departmentId, String managerId, String jobId) {
-//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         String result = "Maaf data gagal disimpan";
-        Employee employee = new Employee(Integer.parseInt(employeeId), firstName, lastName, email, phoneNumber, new java.sql.Date(d.getTime()), new BigDecimal(salary), new BigDecimal(commissionPct), new Department(Short.parseShort(departmentId)), new Employee(Integer.parseInt(managerId)), new Job(jobId));
-
-        if (iedao.insert(employee)) {
-            result = "Data Berhasil Disimpan";
+        try {
+            //        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            date = formatter.parse(hireDate);
+            Employee employee = new Employee(Integer.parseInt(employeeId), firstName, lastName, email, phoneNumber, new java.sql.Date(date.getTime()), new BigDecimal(salary), new BigDecimal(commissionPct), new Department(Short.parseShort(departmentId)), new Employee(Integer.parseInt(managerId)), new Job(jobId));
+            
+            if (iedao.insert(employee)) {
+                result = "Data Berhasil Disimpan";
+            }
+ 
+        } catch (ParseException ex) {
+            Logger.getLogger(EmployeeController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return result;
-
+                   return result;
     }
 
 }
