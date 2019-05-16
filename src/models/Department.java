@@ -23,7 +23,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author sofia
+ * @author Relion31
  */
 @Entity
 @Table(name = "DEPARTMENTS")
@@ -61,6 +61,13 @@ public class Department implements Serializable {
     public Department(Short departmentId, String departmentName) {
         this.departmentId = departmentId;
         this.departmentName = departmentName;
+    }
+
+    public Department(Short departmentId, String departmentName, Employee managerId, Location locationId) {
+        this.departmentId = departmentId;
+        this.departmentName = departmentName;
+        this.managerId = managerId;
+        this.locationId = locationId;
     }
 
     public Short getDepartmentId() {

@@ -8,13 +8,13 @@ package idaos;
 import java.util.List;
 import models.Job;
 
+
 /**
  *
- * @author sofia
+ * @author Relion31
  */
 public interface IJobDAO {
-    public boolean deleteById(Job job);
-    public boolean update(Job job);
-    public boolean insert(Job job);
-    public List<Job> getAll();
+    public List<Job> getData(Job j, boolean isGetById);
+    public List<Job> search(Object key);
+    public boolean delete(Job j);
 }

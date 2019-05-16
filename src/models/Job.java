@@ -22,7 +22,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author sofia
+ * @author Relion31
  */
 @Entity
 @Table(name = "JOBS")
@@ -60,13 +60,6 @@ public class Job implements Serializable {
     public Job(String jobId, String jobTitle) {
         this.jobId = jobId;
         this.jobTitle = jobTitle;
-    }
-
-    public Job(String jobId, String jobTitle, Integer minSalary, Integer maxSalary) {
-        this.jobId = jobId;
-        this.jobTitle = jobTitle;
-        this.minSalary = minSalary;
-        this.maxSalary = maxSalary;
     }
 
     public String getJobId() {

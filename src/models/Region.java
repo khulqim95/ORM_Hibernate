@@ -22,7 +22,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author sofia
+ * @author Relion31
  */
 @Entity
 @Table(name = "REGIONS")
@@ -36,9 +36,9 @@ public class Region implements Serializable {
     private static final long serialVersionUID = 1L;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Id
-    @Basic(optional = false)
-    @Column(name = "REGION_ID")
-    private BigDecimal regionId;
+    @Basic(optional = false)        //tidak optional harus diisi
+    @Column(name = "REGION_ID")     //nama dari database
+    private BigDecimal regionId;    // nama dari inputan sendiri
     @Column(name = "REGION_NAME")
     private String regionName;
     @OneToMany(mappedBy = "regionId", fetch = FetchType.LAZY)
@@ -47,15 +47,15 @@ public class Region implements Serializable {
     public Region() {
     }
 
-    public Region(BigDecimal regionId, String regionName) {
-        this.regionId = regionId;
-        this.regionName = regionName;
-    }
-
     public Region(BigDecimal regionId) {
         this.regionId = regionId;
     }
 
+    public Region(BigDecimal regionId, String regionName) {
+        this.regionId = regionId;
+        this.regionName = regionName;
+    }
+    
     public BigDecimal getRegionId() {
         return regionId;
     }

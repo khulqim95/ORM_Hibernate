@@ -5,23 +5,19 @@
  */
 package idaos;
 
-import java.math.BigDecimal;
 import java.util.List;
 import models.Region;
 
 /**
  *
- * @author sofia
+ * @author Relion31
  */
 public interface IRegionDAO {
     public List<Region> getAll();
-    public Region getById(String regionId);
-    public List<Region> getId(String id);
-    public boolean insertRegion(Region region);
-    public boolean update(Region region);
-    public boolean delete(Region region);
-//    public List<Region> search (Object key);
-    public Region search (String key);
-    
+    public List<Region> select(Region r);
+    public List<Region> search(Object key);
+    public List<Region> getData(Region r, boolean isGetById);
+    public boolean save(Region r);
+    public boolean delete(Region r);
     
 }

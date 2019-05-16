@@ -3,12 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package daos;
+package Daos;
 
-import java.lang.reflect.Field;
+import Idaos.IDepartmentDAO;
+import models.Department;
+import models.Employee;
+import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.List;
-import models.Department;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -16,56 +18,39 @@ import tools.HibernateUtil;
 
 /**
  *
- * @author sofia
+ * @author RossaHening
  */
-public class DepartmentDAO implements idaos.IDepartment{
-
-    private SessionFactory sessionFactory = null;
+public class DepartmentDAO implements  IDepartmentDAO{
+    private SessionFactory sessionFactory = null; // KONEKSI DATABSAE SESION FACTORY 
     private Session session = null;
     private Transaction transaction = null;
-    
-    public  DepartmentDAO(){
-        this.sessionFactory = HibernateUtil.getSessionFactory();
-    }
 
-    public  DepartmentDAO(SessionFactory factory){
-       this.sessionFactory = factory;
-    }
-    
-    @Override
-    public List<Department> getAll() {
-        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        List<Department> departments = new ArrayList<Department>();
-        try {
-            session = sessionFactory.openSession();
-            transaction = session.beginTransaction();
-//            transaction.begin();
-            departments = session.createQuery("FROM Department").list();
-            transaction.commit();
-        } catch (Exception e) {
-            if (transaction != null) transaction.rollback();
-            e.printStackTrace();
-            System.out.println(e.getMessage());
-        } finally {
-            session.close();
-        }
-        return departments;
+//    public DepartmentDAO() {
+//        this.sessionFactory = HibernateUtil.getSessionFactory();// CONSTRUCTUR LANGSUNG BIKIN KONEKSI NYA INSTANSIASI
+//    }
+    public DepartmentDAO(SessionFactory sessionFactory) {
+       this.sessionFactory=sessionFactory;
     }
 
     @Override
-    public boolean delete(Department department) {
+    public boolean insert(Department d) {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        boolean result = false;   
+        boolean result = false;
+        session = sessionFactory.openSession(); // membuka sesi 
+        transaction = session.beginTransaction(); // sesi dimulai
         try {
-            session = sessionFactory.openSession();
-            transaction = session.beginTransaction();
-            session.delete(department);
-            transaction.commit();
+
+            session.save(d);
+            transaction.commit();// sesi di kommit 
             result = true;
+
         } catch (Exception e) {
-            if (transaction != null) transaction.rollback();
             e.printStackTrace();
-            System.out.println(e.getMessage());            
+            if (transaction != null) {
+                transaction.rollback();
+
+            }
+//          
         } finally {
             session.close();
         }
@@ -73,31 +58,38 @@ public class DepartmentDAO implements idaos.IDepartment{
     }
 
     @Override
-    public List<Department> search(Object keyword) {
-        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public List<Department> getAll() {
         List<Department> departments = new ArrayList<>();
         try {
-            session =  sessionFactory.openSession();
+            session = sessionFactory.openSession();
             transaction = session.beginTransaction();
-            String hql = "FROM " + Department.class.getSimpleName() + " WHERE ";
-            for (Field field : Department.class.getDeclaredFields()) {
-                if (!field.getName().contains("UID") && !field.getName().contains("List")) {
-                    hql += field.getName() + " LIKE '%" + keyword + "%' OR ";
-                }
-            }
-            hql = hql.substring(0, hql.lastIndexOf(" OR "));
-            hql += " ORDER BY 1";
-//            System.out.println(hql);
-            departments = session.createQuery(hql).list();
+// transaction.begin(); 
+            departments = session.createQuery("FROM Department").list();
             transaction.commit();
         } catch (Exception e) {
-            if (transaction != null) transaction.rollback();
             e.printStackTrace();
-            System.out.println(e.getMessage());
-        }finally{
-            session.close();
         }
         return departments;
     }
-    
+
+    @Override
+    public List<Department> getById(String id) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<Department> search(String key) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean update(Department d) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean delete(int id) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 }
