@@ -36,6 +36,7 @@ public class JEmployeeView extends javax.swing.JInternalFrame {
         showTableEmployee("");
         getDataComboJobID();
         getDataComboDepartmentID();
+        getDataComboManagerID();
     }
     
     public void resetTextEmployee(){
@@ -72,11 +73,27 @@ public class JEmployeeView extends javax.swing.JInternalFrame {
             row[4]=employees.get(i).getEmail();
             row[5]=employees.get(i).getPhoneNumber();
             row[6]=employees.get(i).getHireDate();
-            row[7]=employees.get(i).getJobId();
+            
+            if(employees.get(i).getJobId()== null){
+                row[7] = "";
+            } else {
+                row[7]=employees.get(i).getJobId().getJobId();
+            }
+            
             row[8]=employees.get(i).getSalary();
             row[9]=employees.get(i).getCommissionPct();
-            row[10]=employees.get(i).getManagerId();
-            row[11]=employees.get(i).getDepartmentId();
+            
+            if(employees.get(i).getManagerId() == null){
+                row[10] = "";
+            } else {
+                row[10]=employees.get(i).getManagerId().getEmployeeId();
+            }
+            
+            if(employees.get(i).getDepartmentId() == null){
+                row[11] = "";
+            } else {
+                row[11]=employees.get(i).getDepartmentId().getDepartmentId();
+            }
             
             model.addRow(row);
         }
@@ -102,7 +119,7 @@ public class JEmployeeView extends javax.swing.JInternalFrame {
     }
     private void getDataComboManagerID(){
         for(Employee employee : new EmployeeController(sessionFactory).getAll()){
-            cmbManagerId.addItem(employee.getManagerId()+ " - " + employee.getManagerId());
+            cmbManagerId.addItem(employee.getEmployeeId()+ " - " + employee.getLastName());
         }
     }
 
@@ -170,6 +187,9 @@ public class JEmployeeView extends javax.swing.JInternalFrame {
             }
         });
         jScrollPane1.setViewportView(tableCountry);
+
+        setClosable(true);
+        setIconifiable(true);
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel1.setText("Employee Info");
@@ -436,7 +456,7 @@ public class JEmployeeView extends javax.swing.JInternalFrame {
         cmbJobId.setSelectedItem(model.getValueAt(SelectedRowIndex, 7).toString());
         txtSalary.setText(model.getValueAt(SelectedRowIndex, 8).toString());
         txtComm.setText(model.getValueAt(SelectedRowIndex, 9).toString());
-        cmbManagerId.setSelectedItem(model.getValueAt(SelectedRowIndex, 12).toString());
+        cmbManagerId.setSelectedItem(model.getValueAt(SelectedRowIndex, 10).toString());
         cmbDepartmentId.setSelectedItem(model.getValueAt(SelectedRowIndex, 11).toString());
     }//GEN-LAST:event_tableEmployeeMouseClicked
 
