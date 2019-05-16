@@ -16,4 +16,5 @@ public interface IDepartment {
     public List<Department> getAll();
     public List<Department> search(Object keyword);
     public boolean delete(Department department);
+    
 }

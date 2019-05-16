@@ -30,4 +30,9 @@ public class CountryController implements ICountryController{
         return cdao.getAll();
     }
 
+    @Override
+    public Country getById(String id) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 }

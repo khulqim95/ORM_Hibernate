@@ -18,20 +18,20 @@ import tools.HibernateUtil;
  *
  * @author sofia
  */
-public class DepartmentDAO implements idaos.IDepartment{
+public class DepartmentDAO implements idaos.IDepartment {
 
     private SessionFactory sessionFactory = null;
     private Session session = null;
     private Transaction transaction = null;
-    
-    public  DepartmentDAO(){
+
+    public DepartmentDAO() {
         this.sessionFactory = HibernateUtil.getSessionFactory();
     }
 
-    public  DepartmentDAO(SessionFactory factory){
-       this.sessionFactory = factory;
+    public DepartmentDAO(SessionFactory factory) {
+        this.sessionFactory = factory;
     }
-    
+
     @Override
     public List<Department> getAll() {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -43,7 +43,9 @@ public class DepartmentDAO implements idaos.IDepartment{
             departments = session.createQuery("FROM Department").list();
             transaction.commit();
         } catch (Exception e) {
-            if (transaction != null) transaction.rollback();
+            if (transaction != null) {
+                transaction.rollback();
+            }
             e.printStackTrace();
             System.out.println(e.getMessage());
         } finally {
@@ -55,7 +57,7 @@ public class DepartmentDAO implements idaos.IDepartment{
     @Override
     public boolean delete(Department department) {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        boolean result = false;   
+        boolean result = false;
         try {
             session = sessionFactory.openSession();
             transaction = session.beginTransaction();
@@ -63,9 +65,11 @@ public class DepartmentDAO implements idaos.IDepartment{
             transaction.commit();
             result = true;
         } catch (Exception e) {
-            if (transaction != null) transaction.rollback();
+            if (transaction != null) {
+                transaction.rollback();
+            }
             e.printStackTrace();
-            System.out.println(e.getMessage());            
+            System.out.println(e.getMessage());
         } finally {
             session.close();
         }
@@ -77,7 +81,7 @@ public class DepartmentDAO implements idaos.IDepartment{
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         List<Department> departments = new ArrayList<>();
         try {
-            session =  sessionFactory.openSession();
+            session = sessionFactory.openSession();
             transaction = session.beginTransaction();
             String hql = "FROM " + Department.class.getSimpleName() + " WHERE ";
             for (Field field : Department.class.getDeclaredFields()) {
@@ -91,13 +95,14 @@ public class DepartmentDAO implements idaos.IDepartment{
             departments = session.createQuery(hql).list();
             transaction.commit();
         } catch (Exception e) {
-            if (transaction != null) transaction.rollback();
+            if (transaction != null) {
+                transaction.rollback();
+            }
             e.printStackTrace();
             System.out.println(e.getMessage());
-        }finally{
+        } finally {
             session.close();
         }
         return departments;
     }
-    
 }

@@ -13,5 +13,11 @@ import models.Country;
  * @author sofia
  */
 public interface ICountryDAO {
-    public List<Country> getAll();
+   public List<Country> getAll();
+    public Country getById(String countryId);
+    public boolean insert(Country country);
+    
+    public List<Country> search(Object keyword);
+    public boolean update(Country country);
+    public boolean delete(Country country);
 }
