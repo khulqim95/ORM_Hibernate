@@ -109,7 +109,24 @@ public class EmployeeDAO implements IEmployeeDAO {
 
     @Override
     public boolean update(Employee employee) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        boolean result = false;
+        try {
+            session = sessionFactory.openSession();
+            transaction = session.beginTransaction();
+
+            session.update(employee);
+            transaction.commit();
+            result = true;
+        } catch (Exception ex) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            ex.printStackTrace();
+        } finally {
+            session.close();
+        }
+        return result;
     }
 
     @Override

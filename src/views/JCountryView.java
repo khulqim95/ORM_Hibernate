@@ -50,7 +50,8 @@ public class JCountryView extends javax.swing.JInternalFrame {
             row[0]=i+1;
             row[1]=countries.get(i).getCountryId();
             row[2]=countries.get(i).getCountryName();
-            row[3]=countries.get(i).getRegionId().getRegionId();
+            row[3]=countries.get(i).getRegionId().getRegionId()
+                    + " - " + countries.get(i).getRegionId().getRegionName();
             
             model.addRow(row);
         }
@@ -93,6 +94,11 @@ public class JCountryView extends javax.swing.JInternalFrame {
         txtSearch = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         tableCountry = new javax.swing.JTable();
+
+        setClosable(true);
+        setIconifiable(true);
+        setMaximizable(true);
+        setResizable(true);
 
         jLabel9.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         jLabel9.setText("Country Info");

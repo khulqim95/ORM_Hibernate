@@ -65,7 +65,8 @@ public class JLocationView extends javax.swing.JInternalFrame {
             row[3]=locations.get(i).getPostalCode();
             row[4]=locations.get(i).getCity();
             row[5]=locations.get(i).getStateProvince();
-            row[6]=locations.get(i).getCountryId().getCountryId();
+            row[6]=locations.get(i).getCountryId().getCountryId()
+                    + " - " + locations.get(i).getCountryId().getCountryName();
             
             model.addRow(row);
         }
@@ -113,6 +114,11 @@ public class JLocationView extends javax.swing.JInternalFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         tableLocation = new javax.swing.JTable();
         btnReset = new javax.swing.JButton();
+
+        setClosable(true);
+        setIconifiable(true);
+        setMaximizable(true);
+        setResizable(true);
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel1.setText("LOCATION INFO");

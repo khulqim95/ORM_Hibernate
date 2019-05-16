@@ -67,15 +67,35 @@ public class EmployeeController implements IEmployeeController {
             //        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
             date = formatter.parse(hireDate);
             Employee employee = new Employee(Integer.parseInt(employeeId), firstName, lastName, email, phoneNumber, new java.sql.Date(date.getTime()), new BigDecimal(salary), new BigDecimal(commissionPct), new Department(Short.parseShort(departmentId)), new Employee(Integer.parseInt(managerId)), new Job(jobId));
-            
+
             if (iedao.insert(employee)) {
                 result = "Data Berhasil Disimpan";
             }
- 
+
         } catch (ParseException ex) {
             Logger.getLogger(EmployeeController.class.getName()).log(Level.SEVERE, null, ex);
         }
-                   return result;
+        return result;
+    }
+
+    @Override
+    public String update(String employeeId, String firstName, String lastName, String email, String phoneNumber, String hireDate, String salary, String commissionPct, String departmentId, String managerId, String jobId) {
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        String result = "Maaf data gagal diupdate";
+        try {
+            //        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            date = formatter.parse(hireDate);
+            Employee employee = new Employee(Integer.parseInt(employeeId), firstName, lastName, email, phoneNumber, new java.sql.Date(date.getTime()), new BigDecimal(salary), new BigDecimal(commissionPct), new Department(Short.parseShort(departmentId)), new Employee(Integer.parseInt(managerId)), new Job(jobId));
+
+            if (iedao.update(employee)) {
+                result = "Data Berhasil Diupdate";
+            }
+
+        } catch (ParseException ex) {
+            Logger.getLogger(EmployeeController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return result;
+
     }
 
 }
