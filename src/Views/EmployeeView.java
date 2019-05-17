@@ -10,6 +10,9 @@ import controllers.EmployeeController;
 import controllers.JobController;
 import icontrollers.IEmployeeController;
 import icontrollers.IJobController;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -30,7 +33,7 @@ public class EmployeeView extends javax.swing.JInternalFrame {
     public EmployeeView() {
         initComponents();
         showTableEmployee("");
-         getDataComboDepartment();
+        getDataComboDepartment();
         getDataComboJob();
         getDataComboMan();
         cbbman.setSelectedIndex(-1);
@@ -39,6 +42,11 @@ public class EmployeeView extends javax.swing.JInternalFrame {
     }
 //SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
     IEmployeeController iemc = new EmployeeController(HibernateUtil.getSessionFactory());
+    
+    //    TimeZone tz = TimeZone.getDefault();
+//    LocalDate localDate = LocalDate.now();
+    Date date = new Date(); // this object contains the current date value 
+    SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
 
     public void showTableEmployee(String s) {
         DefaultTableModel model = (DefaultTableModel) tableEmployee.getModel();
@@ -52,7 +60,7 @@ public class EmployeeView extends javax.swing.JInternalFrame {
             row[4] = employees.get(i).getEmail();
             row[5] = employees.get(i).getPhoneNumber();
             row[6] = employees.get(i).getHireDate();
-            row[7] = employees.get(i).getJobId().getJobId();
+            row[7] = employees.get(i).getJobId().getJobId() + " - " + employees.get(i).getJobId().getJobTitle();
             row[8] = employees.get(i).getSalary();
             row[9] = employees.get(i).getCommissionPct();
             if (employees.get(i).getManagerId() == null) {
@@ -60,23 +68,27 @@ public class EmployeeView extends javax.swing.JInternalFrame {
             } else {
                 row[10] = employees.get(i).getManagerId().getEmployeeId();
             }
-            if (employees.get(i).getDepartmentId()== null) {
+            if (employees.get(i).getDepartmentId() == null) {
                 row[11] = "";
             } else {
-                row[11] = employees.get(i).getDepartmentId().getDepartmentId();
+                row[11] = employees.get(i).getDepartmentId().getDepartmentId() + " - " + employees.get(i).getDepartmentId().getDepartmentName();
             }
 //            row[11] = employees.get(i).getDepartmentId();
             model.addRow(row);
         }
     }
     
+
+
     private void resetText() {
         nik.setText("");
         fname.setText("");
         lname.setText("");
         email.setText("");
         phone.setText("");
-        date.setText("");
+//        date.setText("");
+//        cmbHireDate.setSelectedDate(Calendar.getInstance(tz));
+        cbbdate.setSelectedDate(Calendar.getInstance(getLocale()));
         cbbjob.setSelectedIndex(-1);
         sal.setText("");
         cms.setText("");
@@ -118,7 +130,6 @@ public class EmployeeView extends javax.swing.JInternalFrame {
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
-        date = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
         cbbjob = new javax.swing.JComboBox<>();
@@ -128,6 +139,8 @@ public class EmployeeView extends javax.swing.JInternalFrame {
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
+        cbbdate = new datechooser.beans.DateChooserCombo();
 
         setTitle("DATA EMPLOYEE");
 
@@ -139,6 +152,11 @@ public class EmployeeView extends javax.swing.JInternalFrame {
                 "No", "Employee ID", "First Name", "Last Name", "Email", "Phone", "Hire Date", "Job ID", "Salaryl", "Commission", "Manager ID", "Department ID"
             }
         ));
+        tableEmployee.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tableEmployeeMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tableEmployee);
 
         lname.addActionListener(new java.awt.event.ActionListener() {
@@ -169,6 +187,12 @@ public class EmployeeView extends javax.swing.JInternalFrame {
 
         jLabel11.setText("Department ID");
 
+        jTextField9.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField9ActionPerformed(evt);
+            }
+        });
+
         jButton1.setText("Insert");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -185,18 +209,24 @@ public class EmployeeView extends javax.swing.JInternalFrame {
 
         jButton3.setText("Delete");
 
+        jButton4.setText("Reset");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+
+        cbbdate.setFormat(1);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 689, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 822, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGap(19, 19, 19)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jTextField9, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addGap(19, 19, 19)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1)
                             .addComponent(jLabel2)
@@ -206,87 +236,92 @@ public class EmployeeView extends javax.swing.JInternalFrame {
                             .addComponent(jLabel6))
                         .addGap(32, 32, 32)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(date, javax.swing.GroupLayout.DEFAULT_SIZE, 164, Short.MAX_VALUE)
-                            .addComponent(nik)
+                            .addComponent(nik, javax.swing.GroupLayout.DEFAULT_SIZE, 164, Short.MAX_VALUE)
                             .addComponent(fname)
                             .addComponent(lname)
                             .addComponent(email)
-                            .addComponent(phone))
-                        .addGap(97, 97, 97)
+                            .addComponent(phone)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(cbbdate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))))
+                    .addComponent(jButton4))
+                .addGap(97, 97, 97)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jButton1)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton2)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton3))
+                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel7)
-                                    .addComponent(jLabel8)
-                                    .addComponent(jLabel9)
-                                    .addComponent(jLabel10)
-                                    .addComponent(jLabel11))
-                                .addGap(31, 31, 31)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(cms)
-                                    .addComponent(sal)
-                                    .addComponent(cbbjob, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(cbbman, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(cbbdep, 0, 170, Short.MAX_VALUE)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jButton1)
-                                .addGap(18, 18, 18)
-                                .addComponent(jButton2)
-                                .addGap(18, 18, 18)
-                                .addComponent(jButton3)))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(jLabel7)
+                            .addComponent(jLabel8)
+                            .addComponent(jLabel9)
+                            .addComponent(jLabel10)
+                            .addComponent(jLabel11))
+                        .addGap(31, 31, 31)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(cms)
+                            .addComponent(sal)
+                            .addComponent(cbbjob, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(cbbman, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(cbbdep, 0, 170, Short.MAX_VALUE))))
+                .addContainerGap(167, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jTextField9, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(19, 19, 19))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(nik, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cms, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel7))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(fname, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(sal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel9))
+                .addGap(11, 11, 11)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lname, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3)
+                    .addComponent(jLabel8)
+                    .addComponent(cbbjob, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(email, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4)
+                    .addComponent(jLabel10)
+                    .addComponent(cbbman, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(nik, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(cms, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel7))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(fname, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(sal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel9))
-                        .addGap(11, 11, 11)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lname, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel8)
-                            .addComponent(cbbjob, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(email, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel4)
-                            .addComponent(jLabel10)
-                            .addComponent(cbbman, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(phone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jLabel5))
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(jLabel11)
-                                .addComponent(cbbdep, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(date, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel6))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 58, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jButton1)
-                            .addComponent(jButton2)
-                            .addComponent(jButton3))
-                        .addGap(36, 36, 36)))
-                .addComponent(jTextField9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(phone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel5))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel11)
+                        .addComponent(cbbdep, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(12, 12, 12)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(jLabel6)
+                        .addComponent(cbbdate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jButton1)
+                        .addComponent(jButton2)
+                        .addComponent(jButton3)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton4)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jTextField9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(4, 4, 4))
         );
@@ -305,9 +340,13 @@ public class EmployeeView extends javax.swing.JInternalFrame {
         String department = cbbdep.getSelectedItem().toString();
         String job1 = job.substring(0, job.indexOf("-") - 1);
         String department1 = department.substring(0, department.indexOf("-") - 1);
+        
+        date = cbbdate.getSelectedDate().getTime();
+        String hiredate = formatter.format(date);
+        
         int confirm = JOptionPane.showConfirmDialog(this, "Apakah anda yakin untuk melakukan insert?", "Confirm Insert", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
         if (confirm == JOptionPane.YES_OPTION) {
-            JOptionPane.showMessageDialog(null, iemc.save(nik.getText(), fname.getText(), lname.getText(), email.getText(), phone.getText(), date.getText(), job1, sal.getText(), cms.getText(), man, department1));
+            JOptionPane.showMessageDialog(null, iemc.save(nik.getText(), fname.getText(), lname.getText(), email.getText(), phone.getText(), hiredate, job1, sal.getText(), cms.getText(), man, department1));
             updateTable("");
             resetText();
         }
@@ -315,49 +354,86 @@ public class EmployeeView extends javax.swing.JInternalFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
-            String man = cbbman.getSelectedItem().toString();
+        String man = cbbman.getSelectedItem().toString();
+//        String tgl =  cbbdate.getText();
         String job = cbbjob.getSelectedItem().toString();
         String department = cbbdep.getSelectedItem().toString();
         String job1 = job.substring(0, job.indexOf("-") - 1);
         String department1 = department.substring(0, department.indexOf("-") - 1);
+        
+        date = cbbdate.getSelectedDate().getTime();
+        String hiredate = formatter.format(date);
+        
         int confirm = JOptionPane.showConfirmDialog(this, "Apakah anda yakin untuk melakukan insert?", "Confirm Insert", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
         if (confirm == JOptionPane.YES_OPTION) {
-            JOptionPane.showMessageDialog(null, iemc.save(nik.getText(), fname.getText(), lname.getText(), email.getText(), phone.getText(), date.getText(), job1, sal.getText(), cms.getText(), man, department1));
+            JOptionPane.showMessageDialog(null, iemc.save(nik.getText(), fname.getText(), lname.getText(), email.getText(), phone.getText(), hiredate, job1, sal.getText(), cms.getText(), man, department1));
             updateTable("");
             resetText();
         }
-        
+
     }//GEN-LAST:event_jButton2ActionPerformed
 
-     private void getDataComboDepartment() {
+    private void tableEmployeeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableEmployeeMouseClicked
+        // TODO add your handling code here:
+        DefaultTableModel model = (DefaultTableModel) tableEmployee.getModel();
+        int SelectedRowIndex = tableEmployee.getSelectedRow();
+        nik.setEditable(false);
+        nik.setText(model.getValueAt(SelectedRowIndex, 1).toString());
+        fname.setText(model.getValueAt(SelectedRowIndex, 2).toString());
+        lname.setText(model.getValueAt(SelectedRowIndex, 3).toString());
+        email.setText(model.getValueAt(SelectedRowIndex, 4).toString());
+        phone.setText(model.getValueAt(SelectedRowIndex, 5).toString());
+        cbbdate.setText(model.getValueAt(SelectedRowIndex, 6).toString());
+        cbbjob.setSelectedItem(model.getValueAt(SelectedRowIndex, 7).toString());
+        sal.setText(model.getValueAt(SelectedRowIndex, 8).toString());
+        cms.setText(model.getValueAt(SelectedRowIndex, 9).toString());
+        cbbman.setSelectedItem(model.getValueAt(SelectedRowIndex, 10).toString());
+        cbbdep.setSelectedItem(model.getValueAt(SelectedRowIndex, 11).toString());
+    }//GEN-LAST:event_tableEmployeeMouseClicked
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        // TODO add your handling code here:
+        resetText();
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jTextField9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField9ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField9ActionPerformed
+
+    private void getDataComboDepartment() {
         for (Department department : new DepartmentController(HibernateUtil.getSessionFactory()).getAll()) {
-            cbbdep.addItem(department.getDepartmentId()+ " - " + department.getDepartmentName());
+            cbbdep.addItem(department.getDepartmentId() + " - " + department.getDepartmentName());
         }
     }
 
     private void getDataComboJob() {
         for (Job job : new JobController(HibernateUtil.getSessionFactory()).getAll()) {
-            cbbjob.addItem(job.getJobId()+ " - " + job.getJobTitle());
+            cbbjob.addItem(job.getJobId() + " - " + job.getJobTitle());
         }
     }
-    
+
     private void getDataComboMan() {
         for (Employee emp : new EmployeeController(HibernateUtil.getSessionFactory()).getAll()) {
-            cbbman.addItem(emp.getManagerId()+"");
+            if (emp.getManagerId() == null) {
+                cbbman.addItem("");
+            } else {
+                cbbman.addItem(emp.getManagerId().getEmployeeId() + "");
+            }
         }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private datechooser.beans.DateChooserCombo cbbdate;
     private javax.swing.JComboBox<String> cbbdep;
     private javax.swing.JComboBox<String> cbbjob;
     private javax.swing.JComboBox<String> cbbman;
     private javax.swing.JTextField cms;
-    private javax.swing.JTextField date;
     private javax.swing.JTextField email;
     private javax.swing.JTextField fname;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
