@@ -58,7 +58,7 @@ public class JEmployeeView extends javax.swing.JInternalFrame {
         txtLastName.setText("");
         txtEmail.setText("");
         txtPhoneNumber.setText("");
-        txtHireDate.setText("");
+//        txtHireDate.setText("");
 //        cmbHireDate.setSelectedDate(Calendar.getInstance(tz));
         cmbHireDate.setSelectedDate(Calendar.getInstance(getLocale()));
 //        System.out.println(tz);
@@ -183,7 +183,6 @@ public class JEmployeeView extends javax.swing.JInternalFrame {
         txtLastName = new javax.swing.JTextField();
         txtEmail = new javax.swing.JTextField();
         txtPhoneNumber = new javax.swing.JTextField();
-        txtHireDate = new javax.swing.JTextField();
         cmbJobId = new javax.swing.JComboBox<>();
         txtSalary = new javax.swing.JTextField();
         txtComm = new javax.swing.JTextField();
@@ -274,7 +273,6 @@ public class JEmployeeView extends javax.swing.JInternalFrame {
             }
         });
 
-        txtEmpId.setEditable(false);
         txtEmpId.setText("0");
 
         cmbJobId.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "JobID" }));
@@ -344,8 +342,7 @@ public class JEmployeeView extends javax.swing.JInternalFrame {
                                     .addComponent(txtLastName)
                                     .addComponent(txtEmail)
                                     .addComponent(txtPhoneNumber)
-                                    .addComponent(txtHireDate, javax.swing.GroupLayout.DEFAULT_SIZE, 196, Short.MAX_VALUE)
-                                    .addComponent(cmbHireDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addComponent(cmbHireDate, javax.swing.GroupLayout.DEFAULT_SIZE, 196, Short.MAX_VALUE))
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -392,8 +389,7 @@ public class JEmployeeView extends javax.swing.JInternalFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jLabel1)
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(layout.createSequentialGroup()
@@ -422,8 +418,7 @@ public class JEmployeeView extends javax.swing.JInternalFrame {
                                     .addComponent(btnDelete)
                                     .addComponent(btnInsert)
                                     .addComponent(btnReset)
-                                    .addComponent(btnUpdate))))
-                        .addGap(35, 35, 35))
+                                    .addComponent(btnUpdate)))))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(txtEmpId, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -447,16 +442,14 @@ public class JEmployeeView extends javax.swing.JInternalFrame {
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel7)
-                            .addComponent(cmbHireDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(txtHireDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)))
+                            .addComponent(cmbHireDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(41, 41, 41)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel14)
                     .addComponent(txtSearchEmp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(45, Short.MAX_VALUE))
+                .addContainerGap(49, Short.MAX_VALUE))
         );
 
         pack();
@@ -552,7 +545,7 @@ public class JEmployeeView extends javax.swing.JInternalFrame {
             c.setTime(ds);
             cmbHireDate.setSelectedDate(c);
             
-            txtHireDate.setText(ds.toString());
+//            txtHireDate.setText(ds.toString());
             cmbJobId.setSelectedItem(model.getValueAt(SelectedRowIndex, 7).toString());
             txtSalary.setText(model.getValueAt(SelectedRowIndex, 8).toString());
             txtComm.setText(model.getValueAt(SelectedRowIndex, 9).toString());
@@ -613,7 +606,6 @@ public class JEmployeeView extends javax.swing.JInternalFrame {
     private javax.swing.JTextField txtEmail;
     private javax.swing.JTextField txtEmpId;
     private javax.swing.JTextField txtFirstName;
-    private javax.swing.JTextField txtHireDate;
     private javax.swing.JTextField txtLastName;
     private javax.swing.JTextField txtPhoneNumber;
     private javax.swing.JTextField txtSalary;
