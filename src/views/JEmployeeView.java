@@ -7,7 +7,7 @@ package views;
 
 import controllers.EmployeeController;
 import controllers.JobController;
-import daos.DepartmentController;
+import controllers.DepartmentController;
 import entities.Department;
 import entities.Employee;
 import entities.Job;

@@ -1,5 +1,6 @@
-package daos;
+package controllers;
 
+import daos.DepartmentDAO;
 import entities.Department;
 import icontrollers.IDepartmentController;
 import idaos.IDepartmentDAO;
