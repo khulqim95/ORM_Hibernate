@@ -65,15 +65,15 @@ public class ManualTester {
 //        }
 
         //General COntroller GetByID
-//        IGeneralController<Region> igcR = new GeneralController<>(Region.class, sessionFactory);
-        IGeneralController<Country> igcC = new GeneralController<>(Country.class, sessionFactory);
-        for (Country c : igcC.getById("SB")) {
-            System.out.println(c.getCountryId()+" "+c.getCountryName()+" "+c.getRegionId().getRegionName());
-        }
-
-//        for (Region r : igcR.getAll()) {
-//            System.out.println(r.getRegionId()+" "+r.getRegionName());
+        IGeneralController<Region> igcR = new GeneralController<>(Region.class, sessionFactory);
+//        IGeneralController<Country> igcC = new GeneralController<>(Country.class, sessionFactory);
+//        for (Country c : igcC.getById("SB")) {
+//            System.out.println(c.getCountryId()+" "+c.getCountryName()+" "+c.getRegionId().getRegionName());
 //        }
+
+        for (Region r : igcR.getById("25")) {
+            System.out.println(r.getRegionId()+" "+r.getRegionName());
+        }
 
         //insert GENERAL Controller
 //        int id_region = 25;
