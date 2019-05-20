@@ -4,7 +4,6 @@ import controllers.CountryController;
 import controllers.RegionController;
 import entities.Country;
 import entities.Region;
-import icontrollers.ICountryController;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -17,15 +16,30 @@ import tools.HibernateUtil;
  *
  * @author RR17
  */
-public class JCountryView extends javax.swing.JInternalFrame {
-    private SessionFactory sessionFactory = HibernateUtil.getSessionFactory(); //masuk koneksi pintu utama (masuk ke table HR)
-    private Session session = null; //masuk ke koneksi dalam yg sudah ada tujuan(hanya beberapa sesi2)
-    ICountryController icc = new CountryController(sessionFactory);
+public class JCountryView<T> extends javax.swing.JInternalFrame {
+    final private SessionFactory sessionFactory = HibernateUtil.getSessionFactory(); //masuk koneksi pintu utama (masuk ke table HR)
+    final private Session session = null; //masuk ke koneksi dalam yg sudah ada tujuan(hanya beberapa sesi2)
+    final private String[] header = {"Country Id", "City", "Region Id"};
+    final private CountryController countryController;
+    final private ViewProccess viewProccess;
+    final private List<T> CountryTemp;
+    
 
     public JCountryView() {
         initComponents();
-        showTableCountry("");
+        this.viewProccess = new ViewProccess<>();
+        this.countryController = new CountryController(sessionFactory);
+        this.CountryTemp = this.getDataRegions();
+        this.bindingTable();
         getDataComboRegionID();
+    }
+    
+    final public void bindingTable(){
+        this.viewProccess.viewTable(tableCountry, header, CountryTemp);
+    }
+    
+    final public List<T> getDataRegions(){
+        return this.countryController.getAll();
     }
     
     public void resetTextCountry(){
@@ -42,9 +56,9 @@ public class JCountryView extends javax.swing.JInternalFrame {
         DefaultTableModel model = (DefaultTableModel)tableCountry.getModel();
         Object[] row = new Object[4];
         List<Country> countries = new ArrayList<>();
-        countries = icc.search(s);
+        countries = countryController.search(s);
         if (s.isEmpty()) {
-            countries = icc.getAll();
+            countries = countryController.getAll();
         }
         for (int i = 0; i < countries.size(); i++) {
             row[0]=i+1;
@@ -259,7 +273,7 @@ public class JCountryView extends javax.swing.JInternalFrame {
         
         int confirm = JOptionPane.showConfirmDialog(this, "Apakah anda yakin untuk melakukan insert?", "Confirm Insert", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
         if(confirm==JOptionPane.YES_OPTION){
-            JOptionPane.showMessageDialog(null, icc.insert(txtCountryId.getText(), txtCountryName.getText(), rgnId));
+            JOptionPane.showMessageDialog(null, countryController.insert(txtCountryId.getText(), txtCountryName.getText(), rgnId));
             updateTableCountry("");
             resetTextCountry();
         }
@@ -269,7 +283,7 @@ public class JCountryView extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
         int confirm = JOptionPane.showConfirmDialog(this, "Apakah anda yakin untuk melakukan delete?", "Confirm Update", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
         if(confirm==JOptionPane.YES_OPTION){
-            JOptionPane.showMessageDialog(null, icc.delete(txtCountryId.getText()));
+            JOptionPane.showMessageDialog(null, countryController.delete(txtCountryId.getText()));
             updateTableCountry("");
             resetTextCountry();
         }

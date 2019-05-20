@@ -33,8 +33,8 @@ public class ManualTester {
 //        CountryDAO countryDAO = new CountryDAO(sessionFactory);
 //        EmployeeDAO employeeDAO = new EmployeeDAO(sessionFactory);
         
-//        MainFrameView mfv = new MainFrameView();
-//        mfv.setVisible(true);
+        MainFrameView mfv = new MainFrameView();
+        mfv.setVisible(true);
 
         //General DAO search by ID menggunakan kondisi true
 //        GeneralDAO<Country> cdao = new GeneralDAO<>(Country.class, sessionFactory);
@@ -65,15 +65,15 @@ public class ManualTester {
 //        }
 
         //General COntroller GetByID
-        IGeneralController<Region> igcR = new GeneralController<>(Region.class, sessionFactory);
+//        IGeneralController<Region> igcR = new GeneralController<>(Region.class, sessionFactory);
 //        IGeneralController<Country> igcC = new GeneralController<>(Country.class, sessionFactory);
 //        for (Country c : igcC.getById("SB")) {
 //            System.out.println(c.getCountryId()+" "+c.getCountryName()+" "+c.getRegionId().getRegionName());
 //        }
 
-        for (Region r : igcR.getById("25")) {
-            System.out.println(r.getRegionId()+" "+r.getRegionName());
-        }
+//        for (Region r : igcR.getById("25")) {
+//            System.out.println(r.getRegionId()+" "+r.getRegionName());
+//        }
 
         //insert GENERAL Controller
 //        int id_region = 25;

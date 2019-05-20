@@ -14,7 +14,7 @@ import org.hibernate.SessionFactory;
 public class GeneralController<T> implements IGeneralController<T>{
     private IGeneralDAO igdao;
     
-    public GeneralController(Class general, SessionFactory sessionFactory){
+    public GeneralController(Class<T> general, SessionFactory sessionFactory){
         igdao = new GeneralDAO<>(general, sessionFactory);
     }
 

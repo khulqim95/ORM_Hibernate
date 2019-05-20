@@ -1,11 +1,9 @@
 package daos;
 
-import entities.Location;
 import idaos.IGeneralDAO;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
-import static javafx.scene.input.KeyCode.T;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -39,8 +37,8 @@ public class GeneralDAO<T> implements IGeneralDAO<T> {
 }
     
     @Override
-    public List<T> getData(Object key, boolean isGetById) {
-        List<T> list = new ArrayList<>();
+    public List<Object[]> getData(Object key, boolean isGetById) {
+        List<Object[]> list = new ArrayList<>();
         try {
             session = sessionFactory.openSession(); //pembukaan sesinya
             transaction = session.beginTransaction(); //kemudian pembukaan session untuk transaksi
